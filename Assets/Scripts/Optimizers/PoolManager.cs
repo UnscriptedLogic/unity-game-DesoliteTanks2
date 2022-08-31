@@ -21,17 +21,17 @@ namespace Core
             }
         }
 
-        public static PoolManager instance;
-        private void Awake()
+        public static PoolManager poolManagerInstance;
+        protected virtual void Awake()
         {
-            instance = this;
+            poolManagerInstance = this;
         }
 
         public Transform poolContainer;
         public List<Pool> prePools;
         public Dictionary<string, Queue<GameObject>> pools { get; private set; }
 
-        private void Start()
+        protected virtual void Start()
         {
             prePools = new List<Pool>();
             pools = new Dictionary<string, Queue<GameObject>>();
@@ -45,7 +45,7 @@ namespace Core
             }
         }
 
-        public GameObject PullFromPool(GameObject poolRep)
+        public virtual GameObject PullFromPool(GameObject poolRep)
         {
             string poolName = poolRep.name;
             GameObject poolItem;
@@ -73,7 +73,7 @@ namespace Core
             return poolItem;
         }
 
-        public GameObject PullFromPool(GameObject poolRep, Action<GameObject> method)
+        public virtual GameObject PullFromPool(GameObject poolRep, Action<GameObject> method)
         {
             string poolName = poolRep.name;
             GameObject poolItem;
@@ -101,7 +101,7 @@ namespace Core
             return poolItem;
         }
 
-        public void PushToPool(GameObject poolItem)
+        public virtual void PushToPool(GameObject poolItem)
         {
             string poolName = poolItem.name;
             if (!pools.ContainsKey(poolName))
@@ -121,14 +121,14 @@ namespace Core
             pools[poolName].Enqueue(poolItem);
         }
 
-        public void CreatePool(string poolName, GameObject item)
+        protected virtual void CreatePool(string poolName, GameObject item)
         {
             Queue<GameObject> newPoolQueue = new Queue<GameObject>();
             pools.Add(poolName, newPoolQueue);
             prePools.Add(new Pool(item, 0, CreatePoolContainer(item.name)));
         }
 
-        private GameObject CreatePoolItem(GameObject item)
+        protected virtual GameObject CreatePoolItem(GameObject item)
         {
             GameObject newItem = Instantiate(item);
             newItem.name = item.name;
@@ -136,7 +136,7 @@ namespace Core
             return newItem;
         }
 
-        private Transform CreatePoolContainer(string itemName = "GameObject")
+        protected virtual Transform CreatePoolContainer(string itemName = "GameObject")
         {
             Transform container = new GameObject(itemName + "_Pool").transform;
             container.SetParent(poolContainer);

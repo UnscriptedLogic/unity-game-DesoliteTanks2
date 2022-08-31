@@ -11,14 +11,16 @@ namespace Entities
     {
         [SerializeField] private float speed;
         [SerializeField] private Rigidbody rb;
-        [SerializeField] private Transform target;
+        [SerializeField] private EntityController entityController;
         [SerializeField] private bool drawPath;
-        
+
+        private Transform target;
         private Vector3 moveDirection;
         private Vector3 nextPos;
         private List<Vector3> path;
         private int currentWaypoint;
         private bool pathFound;
+        private bool initialized;
 
         [SerializeField] private int repathAfterNodes = 2;
         [SerializeField] private float repathInterval = 1f;
@@ -27,9 +29,19 @@ namespace Entities
         private PathFindingManager pathFindingManager;
         private PFNode prevPathfindCallNode;
 
+        private void Awake()
+        {
+            entityController.OnTargetSet += Initialize;
+        }
+
         private void OnEnable()
         {
             pathFindingManager = PathFindingManager.instance;
+        }
+        
+        private void Initialize()
+        {
+            initialized = true;
             GetPath();
         }
 
@@ -45,6 +57,9 @@ namespace Entities
 
         private void Update()
         {
+            if (!initialized)
+                return;
+
             if (pathFound)
             {
                 if (Vector3.Distance(transform.position, nextPos) < 0.1f)
@@ -96,13 +111,19 @@ namespace Entities
 
         private void GetPath()
         {
-            PathFindingRequester.RequestPath(transform.position, target.position, OnPathFound);
-            prevPathfindCallNode = PathFindingManager.instance.NodeFromWorldPoint(transform.position);
+            Transform target = entityController.GetTarget(out bool isValid);
+
+            if (isValid)
+            {
+                PathFindingRequester.RequestPath(transform.position, target.position, OnPathFound);
+                prevPathfindCallNode = PathFindingManager.instance.NodeFromWorldPoint(transform.position);
+            }
+
         }
 
         public void GetInput()
         {
-            
+            //Empty Function
         }
 
         public void Move()
