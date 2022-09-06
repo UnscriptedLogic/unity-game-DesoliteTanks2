@@ -12,7 +12,7 @@ namespace Entities
         public class DropList
         {
             public string tankID;
-            public List<GameObject> entityDrops;
+            public List<GameObject> entityDrops = new List<GameObject>();
         }
 
         [SerializeField] private List<DropList> dropList = new List<DropList>();

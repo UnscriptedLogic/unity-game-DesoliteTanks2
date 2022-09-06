@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropList:
   - tankID: normal
-    entityDrops: []
+    entityDrops:
+    - {fileID: 1911323863274586806, guid: 36072ec3fe8ca444fa03dd9cb74992b0, type: 3}

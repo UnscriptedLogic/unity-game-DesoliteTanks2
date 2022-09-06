@@ -68,7 +68,7 @@ Transform:
   - {fileID: 629178393419011181}
   - {fileID: 627568066}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1094923464681625116
 BoxCollider:
@@ -165,6 +165,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 1094923464681625090}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 7234b232ca354bf4ba325d7ac7d2588b,
@@ -228,6 +229,7 @@ PrefabInstance:
       value: PlayerTank
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 7234b232ca354bf4ba325d7ac7d2588b, type: 3}
 --- !u!4 &629178393419011181 stripped
 Transform:

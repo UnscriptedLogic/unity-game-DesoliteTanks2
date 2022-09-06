@@ -47,8 +47,8 @@ namespace Core
         public override void PushToPool(GameObject poolItem)
         {
             base.PushToPool(poolItem);
-            UnsubscribeEvents(poolItem);
             OnEntityPushed?.Invoke(poolItem);
+            UnsubscribeEvents(poolItem);
         }
 
         public void DoEventListenChecks(GameObject toPull)

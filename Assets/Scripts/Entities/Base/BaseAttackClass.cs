@@ -26,6 +26,7 @@ namespace Entities
                 ProjectileData projectileData = new ProjectileData(baseManager.EntityID, damage, bulletSpeed);
                 bullet.GetComponent<Projectile>().Initialize(projectileData);
                 bullet.transform.SetPositionAndRotation(bulletSpawn.position, bulletSpawn.rotation);
+                bullet.transform.SetParent(null);
                 bullet.SetActive(true);
             });
         }

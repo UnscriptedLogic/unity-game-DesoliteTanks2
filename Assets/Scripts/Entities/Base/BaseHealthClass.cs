@@ -13,16 +13,12 @@ namespace Entities
         [Header("Base Components")]
         [SerializeField] protected BaseManagerClass baseManager;
 
-        private DamageManager damageManager;
-
         protected virtual void OnEnable()
         {
             if (overrideHealth)
             {
                 currentHealth = maxHealth;
             }
-
-            damageManager = DamageManager.instance;
         }
 
         public void SetHealth(float newHealth)
@@ -45,8 +41,7 @@ namespace Entities
             }
 
             OnDamageCallback?.Invoke(prevHealth - currentHealth);
-            damageManager.DamageTaken(attackerID, baseManager.EntityID, prevHealth, currentHealth);
-
+            DamageManager.instance.DamageTaken(attackerID, baseManager.EntityID, prevHealth, currentHealth);
         }
 
         public float GetCurrentHealth()

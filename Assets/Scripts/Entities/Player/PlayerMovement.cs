@@ -15,16 +15,13 @@ namespace Entities
         private void Update()
         {
             GetInput();
-        }
-
-        private void FixedUpdate()
-        {
             Move();
         }
 
         public void Move()
         {
-            rb.MovePosition(transform.position + moveDirection * speed * Time.fixedDeltaTime);
+            Vector3 moveVelocity = moveDirection * speed;
+            rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
 
             if (moveDirection.magnitude > 0)
             {
