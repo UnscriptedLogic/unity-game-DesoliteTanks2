@@ -7,15 +7,15 @@ namespace LevelManagement
     public class LevelStateFactory
     {
         protected LevelState levelState;
-        protected LevelSetUp levelSetUp;
+        protected LS_LevelSetUp levelSetUp;
 
         public LevelState LevelState => LevelState;
-        public LevelSetUp LevelSetUp => levelSetUp;
+        public LS_LevelSetUp LevelSetUp => levelSetUp;
 
         public LevelStateFactory(LevelStateContext context)
         {
             levelState = new LevelState(context, this);
-            levelSetUp = new LevelSetUp(context, this);
+            levelSetUp = new LS_LevelSetUp(context, this);
         }
     }
 }

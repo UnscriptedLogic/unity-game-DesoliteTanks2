@@ -15,10 +15,22 @@ namespace Core
             entityPoolInstance = this;
         }
 
+        protected override void Start()
+        {
+
+        }
+
         public override GameObject PullFromPool(GameObject poolRep, Action<GameObject> method)
         {
             string poolName = poolRep.name;
             GameObject poolItem;
+
+            if (pools == null)
+            {
+                prePools = new List<Pool>();
+                pools = new Dictionary<string, Queue<GameObject>>();
+            }
+
             if (pools.ContainsKey(poolName))
             {
                 if (pools[poolName].Count > 1)

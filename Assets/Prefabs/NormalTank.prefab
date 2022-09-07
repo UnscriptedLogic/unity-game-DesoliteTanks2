@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1398325981}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 1014535781392882978}
   - component: {fileID: 1014535781365742385}
   - component: {fileID: 763260886347156726}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: NormalTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ Transform:
   - {fileID: 693241632966046648}
   - {fileID: 1398325981}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!65 &1014535781392883007
 BoxCollider:
@@ -130,7 +130,7 @@ MonoBehaviour:
   rb: {fileID: 1014535781392883005}
   entityController: {fileID: 4905850300643520208}
   drawPath: 0
-  repathAfterNodes: 4
+  repathAfterNodes: 6
   repathInterval: 1
 --- !u!114 &1014535781365742385
 MonoBehaviour:
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014535781392882979}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 454b2c62cda2c5240945bc3a078a5172, type: 3}
   m_Name: 
@@ -172,6 +172,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 1014535781392883006}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: db584b98489af1b4a88b28466f29d4b5,
@@ -229,12 +230,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: db584b98489af1b4a88b28466f29d4b5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fa82b8cd9bd1a9946913fd104f9727b3, type: 2}
     - target: {fileID: 919132149155446097, guid: db584b98489af1b4a88b28466f29d4b5,
         type: 3}
       propertyPath: m_Name
       value: GreyTank
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: db584b98489af1b4a88b28466f29d4b5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: db584b98489af1b4a88b28466f29d4b5, type: 3}
 --- !u!4 &693241632966046648 stripped
 Transform:

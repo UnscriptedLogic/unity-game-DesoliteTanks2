@@ -32,7 +32,6 @@ namespace LevelManagement
 
         public void SwitchState(LevelState newLevelState)
         {
-            context.currLevelState.ExitState();
             context.currLevelState = newLevelState;
             context.currLevelState.EnterState();
         }

@@ -29,7 +29,7 @@ namespace Core
 
         public Transform poolContainer;
         public List<Pool> prePools;
-        public Dictionary<string, Queue<GameObject>> pools { get; private set; }
+        public Dictionary<string, Queue<GameObject>> pools { get; protected set; }
 
         protected virtual void Start()
         {
