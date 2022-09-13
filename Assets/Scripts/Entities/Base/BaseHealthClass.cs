@@ -26,6 +26,11 @@ namespace Entities
             currentHealth = newHealth;
         }
 
+        public float GetCurrentHealth()
+        {
+            return currentHealth;
+        }
+
         public virtual void TakeDamage(float amount, string attackerID, Action<float> OnDamageCallback)
         {
             if (attackerID == baseManager.EntityID)
@@ -36,22 +41,22 @@ namespace Entities
 
             if (currentHealth <= 0)
             {
-                currentHealth = 0f;
-                EntityPoolManager.entityPoolInstance.PushToPool(gameObject);
+                EntityDeathMethod();
             }
 
             OnDamageCallback?.Invoke(prevHealth - currentHealth);
             DamageManager.instance.DamageTaken(attackerID, baseManager.EntityID, prevHealth, currentHealth);
         }
 
-        public float GetCurrentHealth()
-        {
-            return currentHealth;
-        }
-
         public void OnDamageCallBack(float damageTaken)
         {
             throw new NotImplementedException();
+        }
+
+        protected virtual void EntityDeathMethod()
+        {
+            currentHealth = 0f;
+            EntityManager.instance.RemoveEntity(gameObject);
         }
     }
 }

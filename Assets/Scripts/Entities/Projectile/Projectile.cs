@@ -30,6 +30,7 @@ namespace Entities
         public void Initialize(ProjectileData data)
         {
             tankID = data.tankID;
+            team = data.team;
             damage = data.damage;
             speed = data.bulletSpeed;
             _lifeTime = lifeTime;
@@ -45,7 +46,7 @@ namespace Entities
 
                 if (_lifeTime <= 0)
                 {
-                    EntityPoolManager.entityPoolInstance.PushToPool(gameObject);
+                    EntityManager.instance.RemoveEntity(gameObject);
                 }
                 else
                 {
@@ -59,6 +60,11 @@ namespace Entities
             IDamageable damageScript = other.GetComponent<IDamageable>();
             if (damageScript != null)
             {
+                if (other.GetComponent<BaseManagerClass>().Team == team)
+                {
+                    return; 
+                }
+
                 float hitEntityHealth = damageScript.GetCurrentHealth();
                 damageScript.TakeDamage(damage, tankID, damageTaken =>
                 {

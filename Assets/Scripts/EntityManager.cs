@@ -10,42 +10,96 @@ namespace Core
 {
     public class EntityManager : MonoBehaviour
     {
+        [Serializable]
+        public class EntityTeam
+        {
+            public string teamName;
+            public Color teamColor;
+            public List<GameObject> entities;
+
+            public EntityTeam(string teamName, Color teamColor)
+            {
+                this.teamName = teamName;
+                this.teamColor = teamColor;
+                entities = new List<GameObject>();
+            }
+        }
+
         public static EntityManager instance;
+
+        public List<EntityTeam> entityTeams = new List<EntityTeam>();
 
         [SerializeField] private EntityPoolManager entityPoolManager;
         [SerializeField] private PathFindingManager pathfindingManager;
 
         [SerializeField] private bool drawBoxes;
-        [SerializeField] private List<GameObject> liveEntities = new List<GameObject>();
-        [SerializeField] private List<GameObject> deadEntities = new List<GameObject>();
+        private List<GameObject> liveEntities = new List<GameObject>();
+        private List<GameObject> deadEntities = new List<GameObject>();
+
+        public Action<GameObject> OnEntityDeath;
 
         private void Awake()
         {
             instance = this;
         }
-
-        private void Start()
+        
+        public GameObject CreateEntity(GameObject entityPrefab, string teamName)
         {
-            entityPoolManager.OnEntityPushed += RemoveEntity;
-            entityPoolManager.OnEntityPulled += AddEntity;
-        }
+            GameObject newEntity = entityPoolManager.PullFromPool(entityPrefab, entity => { });
 
-        private void AddEntity(GameObject obj)
-        {
-            liveEntities.Add(obj);
-            if (deadEntities.Contains(obj))
+            GetTeam(teamName).entities.Add(newEntity);
+            newEntity.GetComponent<BaseManagerClass>().Team = teamName;
+
+            liveEntities.Add(newEntity);
+            if (deadEntities.Contains(newEntity))
             {
-                deadEntities.Remove(obj);
+                deadEntities.Remove(newEntity);
             }
+
+            return newEntity;
         }
 
-        private void RemoveEntity(GameObject obj)
+        public void RemoveEntity(GameObject obj)
         {
+            EntityPoolManager.entityPoolInstance.PushToPool(obj);
+
+            string teamName = obj.GetComponent<BaseManagerClass>().Team;
+            for (int i = 0; i < entityTeams.Count; i++)
+            {
+                if (entityTeams[i].teamName == teamName)
+                {
+                    entityTeams[i].entities.Remove(obj);
+                }
+            }
+
             deadEntities.Add(obj);
             if (liveEntities.Contains(obj))
             {
                 liveEntities.Remove(obj);
             }
+
+            OnEntityDeath?.Invoke(obj);
+        }
+
+        public EntityTeam GetTeam(string teamName)
+        {
+            EntityTeam entityTeam = null;
+            for (int i = 0; i < entityTeams.Count; i++)
+            {
+                if (entityTeams[i].teamName == teamName)
+                {
+                    entityTeam = entityTeams[i];
+                }
+            }
+
+            if (entityTeam == null)
+            {
+                entityTeam = new EntityTeam(teamName, UnityEngine.Random.ColorHSV());
+                entityTeams.Add(entityTeam);
+                Debug.Log("Created a new team. May not be as expected.");
+            }
+
+            return entityTeam;
         }
 
         public GameObject GetLiveEntityByID(string id)
@@ -64,7 +118,7 @@ namespace Core
             {
                 foreach (GameObject entities in liveEntities)
                 {
-                    Gizmos.color = Color.blue;
+                    Gizmos.color = GetTeam(entities.GetComponent<BaseManagerClass>().Team).teamColor;
                     Gizmos.DrawWireCube(pathfindingManager.NodeFromWorldPoint(entities.transform.position).worldPos, Vector3.one * 0.9f);
                 }
             }

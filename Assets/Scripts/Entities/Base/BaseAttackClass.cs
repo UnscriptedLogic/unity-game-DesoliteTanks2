@@ -21,14 +21,12 @@ namespace Entities
 
         protected void CreateBullet()
         {
-            EntityPoolManager.entityPoolInstance.PullFromPool(bulletPrefab, bullet =>
-            {
-                ProjectileData projectileData = new ProjectileData(baseManager.EntityID, damage, bulletSpeed);
-                bullet.GetComponent<Projectile>().Initialize(projectileData);
-                bullet.transform.SetPositionAndRotation(bulletSpawn.position, bulletSpawn.rotation);
-                bullet.transform.SetParent(null);
-                bullet.SetActive(true);
-            });
+            GameObject bullet = EntityManager.instance.CreateEntity(bulletPrefab, baseManager.Team);
+            ProjectileData projectileData = new ProjectileData(baseManager.EntityID, baseManager.Team, damage, bulletSpeed);
+            bullet.GetComponent<Projectile>().Initialize(projectileData);
+            bullet.transform.SetPositionAndRotation(bulletSpawn.position, bulletSpawn.rotation);
+            bullet.transform.SetParent(null);
+            bullet.SetActive(true);
         }
     }
 }

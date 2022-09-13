@@ -4,15 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using Grid.Pathfinding;
 using System.IO;
+using LevelManagement;
 
 namespace Entities
 {
     public class EntityMovement : MonoBehaviour, IMoveable
     {
+        [Header("Movement Settings")]
         [SerializeField] private float speed;
         [SerializeField] private Rigidbody rb;
         [SerializeField] private EntityController entityController;
+
+        [SerializeField] private int repathAfterNodes = 2;
+        [SerializeField] private float repathInterval = 1f;
+
+        [SerializeField] private TerrainType[] terrainTypes;
+
+        [Header("Debug")]
         [SerializeField] private bool drawPath;
+        [SerializeField] private Color pathColor;
 
         private Transform target;
         private Vector3 moveDirection;
@@ -22,8 +32,6 @@ namespace Entities
         private bool pathFound;
         private bool initialized;
 
-        [SerializeField] private int repathAfterNodes = 2;
-        [SerializeField] private float repathInterval = 1f;
         private float _repathInterval;
 
         private PathFindingManager pathFindingManager;
@@ -72,7 +80,6 @@ namespace Entities
 
                     currentWaypoint++;
                 }
-                
 
                 if (currentWaypoint >= path.Count)
                 {
@@ -102,10 +109,7 @@ namespace Entities
             {
                 _repathInterval -= Time.deltaTime;
             }
-        }
 
-        private void FixedUpdate()
-        {
             Move();
         }
 
@@ -115,10 +119,9 @@ namespace Entities
 
             if (isValid)
             {
-                PathFindingRequester.RequestPath(transform.position, target.position, OnPathFound);
+                PathFindingRequester.RequestPath(transform.position, target.position, OnPathFound, terrainTypes);
                 prevPathfindCallNode = PathFindingManager.instance.NodeFromWorldPoint(transform.position);
             }
-
         }
 
         public void GetInput()
@@ -128,9 +131,17 @@ namespace Entities
 
         public void Move()
         {
-            if (moveDirection.magnitude > 0f)
+            //if (moveDirection.magnitude > 0f)
+            //{
+            //    rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
+            //    transform.forward = moveDirection;
+            //}
+
+            Vector3 moveVelocity = moveDirection * speed;
+            rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+
+            if (moveDirection.magnitude > 0)
             {
-                rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
                 transform.forward = moveDirection;
             }
         }
@@ -143,7 +154,7 @@ namespace Entities
                 {
                     for (int i = 0; i < path.Count; i++)
                     {
-                        Gizmos.color = Color.green;
+                        Gizmos.color = pathColor;
                         Gizmos.DrawSphere(path[i], 0.15f);
 
                         if (i < path.Count - 1)

@@ -17,13 +17,10 @@ namespace LevelManagement
             {
                 if (context.PlayerPrefab != null)
                 {
-                    EntityPoolManager.entityPoolInstance.PullFromPool(context.PlayerPrefab, playerObject =>
-                    {
-                        playerObject.transform.SetPositionAndRotation(context.PlayerStart.position, context.PlayerStart.rotation);
-                        context.Player = playerObject.transform;
-                        playerObject.SetActive(true);
-                    });
-
+                    context.Player = EntityManager.instance.CreateEntity(context.PlayerPrefab, "Protectors").transform;
+                    context.Player.SetPositionAndRotation(context.PlayerStart.position, context.PlayerStart.rotation);
+                    context.Player.gameObject.SetActive(true);
+                    
                     context.CameraController.trackTarget = context.Player.transform;
                 }
             }

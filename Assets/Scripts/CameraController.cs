@@ -13,7 +13,7 @@ namespace CameraManagement
         [SerializeField] private Vector2 movementArea;
         [SerializeField] private Vector2 trackingArea;
         [SerializeField] private float trackSpeed;
-
+        [SerializeField] private bool drawGizmos;
         Vector3 toTrackPos;
 
         private void FixedUpdate()
@@ -44,6 +44,9 @@ namespace CameraManagement
 
         private void OnDrawGizmos()
         {
+            if (!drawGizmos)
+                return;
+
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(transform.position, new Vector3(movementArea.x, 0f, movementArea.y));
 

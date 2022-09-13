@@ -68,7 +68,7 @@ Transform:
   - {fileID: 629178393419011181}
   - {fileID: 627568066}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1094923464681625116
 BoxCollider:
@@ -81,7 +81,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.5, z: 1}
+  m_Size: {x: 0.9, y: 0.5, z: 0.9}
   m_Center: {x: 0, y: -0.25, z: 0}
 --- !u!54 &1094923464681625119
 Rigidbody:
@@ -111,7 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc2efcb9be94e3e45a2d69fc1f73259a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityID: player
+  entityID: tankPlayer
+  team: 
+  BruteForceAddToTeam: 0
 --- !u!114 &1094923464681625117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  bulletSpeed: 150
+  bulletSpeed: 100
   bulletPrefab: {fileID: 8861732116665388950, guid: a3474ef2f8f445c449b5402740945100,
     type: 3}
   bulletSpawn: {fileID: 627568066}

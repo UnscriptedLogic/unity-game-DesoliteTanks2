@@ -68,7 +68,7 @@ Transform:
   - {fileID: 693241632966046648}
   - {fileID: 1398325981}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!65 &1014535781392883007
 BoxCollider:
@@ -81,7 +81,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.5, z: 1}
+  m_Size: {x: 0.9, y: 0.5, z: 0.9}
   m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!54 &1014535781392883005
 Rigidbody:
@@ -95,7 +95,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
@@ -106,12 +106,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014535781392882979}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 075ce7061d583514ab60868256f54772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityID: normal
+  entityID: tanknormal
+  team: 
+  BruteForceAddToTeam: 0
   target: {fileID: 0}
   doBruteForcePlayerLocate: 1
 --- !u!114 &1014535781392882978
@@ -129,9 +131,23 @@ MonoBehaviour:
   speed: 4
   rb: {fileID: 1014535781392883005}
   entityController: {fileID: 4905850300643520208}
-  drawPath: 0
   repathAfterNodes: 6
   repathInterval: 1
+  terrainTypes:
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 64
+    terrainPenalty: 2
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 128
+    terrainPenalty: 3
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 256
+    terrainPenalty: 10
+  drawPath: 1
+  pathColor: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
 --- !u!114 &1014535781365742385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,18 +171,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014535781392882979}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 454b2c62cda2c5240945bc3a078a5172, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  bulletSpeed: 100
+  bulletSpeed: 150
   bulletPrefab: {fileID: 8861732116665388950, guid: a3474ef2f8f445c449b5402740945100,
     type: 3}
   bulletSpawn: {fileID: 1398325981}
   baseManager: {fileID: 4905850300643520208}
-  attackInterval: 1
+  attackInterval: 2
 --- !u!1001 &1014535780939240531
 PrefabInstance:
   m_ObjectHideFlags: 0

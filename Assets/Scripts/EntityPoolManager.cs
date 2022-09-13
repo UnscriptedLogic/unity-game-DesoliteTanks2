@@ -7,9 +7,10 @@ namespace Core
 {
     public class EntityPoolManager : PoolManager
     {
-        public Action<GameObject> OnEntityPulled;
-        public Action<GameObject> OnEntityPushed;
+        public EntityManager entityManager;
+        
         public static EntityPoolManager entityPoolInstance;
+
         protected override void Awake()
         {
             entityPoolInstance = this;
@@ -51,7 +52,6 @@ namespace Core
 
             method(poolItem);
             DoEventListenChecks(poolItem);
-            OnEntityPulled?.Invoke(poolItem);
             
             return poolItem;
         }
@@ -59,18 +59,23 @@ namespace Core
         public override void PushToPool(GameObject poolItem)
         {
             base.PushToPool(poolItem);
-            OnEntityPushed?.Invoke(poolItem);
             UnsubscribeEvents(poolItem);
         }
 
         public void DoEventListenChecks(GameObject toPull)
         {
-
+            if (toPull.GetComponent<IListensToEntityDeath>() != null)
+            {
+                entityManager.OnEntityDeath += toPull.GetComponent<IListensToEntityDeath>().OnEntityDeath;
+            }
         }
 
         public void UnsubscribeEvents(GameObject toPush)
         {
-            
+            if (toPush.GetComponent<IListensToEntityDeath>() != null)
+            {
+                entityManager.OnEntityDeath -= toPush.GetComponent<IListensToEntityDeath>().OnEntityDeath;
+            }
         }
     }
 }

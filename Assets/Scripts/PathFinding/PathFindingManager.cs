@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Grid.Pathfinding
@@ -36,6 +35,12 @@ namespace Grid.Pathfinding
             CreateGrid();
         }
 
+        private void Start()
+        {
+            BlockUpdater.blockUpdaterInstance.OnBlockDestroyed += ReCalculateObstacleNode;
+            BlockUpdater.blockUpdaterInstance.OnBlockCreated += ReCalculateObstacleNode;
+        }
+
         private void CreateGrid()
         {
             pfNodes = new PFNode[gridSizeX, gridSizeY];
@@ -46,9 +51,15 @@ namespace Grid.Pathfinding
                 {
                     Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
                     bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
+
                     pfNodes[x, y] = new PFNode(walkable, worldPoint, x, y);
                 }
             }
+        }
+
+        public void ReCalculateObstacleNode(BlockDetails blockDetails)
+        {
+            NodeFromWorldPoint(blockDetails.position).walkable = !Physics.CheckSphere(blockDetails.position, nodeRadius, unwalkableMask);
         }
 
         public PFNode NodeFromWorldPoint(Vector3 worldPos)
@@ -63,13 +74,24 @@ namespace Grid.Pathfinding
             return pfNodes[x, y];
         }
 
-        public void StartFindPath(Vector3 startPosition, Vector3 targetPosition)
+        public void StartFindPath(Vector3 startPosition, Vector3 targetPosition, TerrainType[] terrainTypes = null)
         {
-            StartCoroutine(FindPath(startPosition, targetPosition));
+            StartCoroutine(FindPath(startPosition, targetPosition, terrainTypes));
         }
 
-        private IEnumerator FindPath(Vector3 start, Vector3 end)
+        private IEnumerator FindPath(Vector3 start, Vector3 end, TerrainType[] terrainTypes = null)
         {
+            LayerMask allWalkableMasks = new LayerMask();
+            Dictionary<int, int> walkableDict = new Dictionary<int, int>();
+            if (terrainTypes != null)
+            {
+                foreach (TerrainType terrainType in terrainTypes)
+                {
+                    allWalkableMasks |= terrainType.terrainMask.value;
+                    walkableDict.Add((int)MathF.Log(terrainType.terrainMask.value, 2), terrainType.terrainPenalty);
+                }
+            }
+
             bool pathSuccess = false;
 
             PFNode startNode = NodeFromWorldPoint(start);
@@ -96,7 +118,25 @@ namespace Grid.Pathfinding
                         {
                             continue;
                         }
-                        int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+
+                        int neighbourPenalty = 0;
+                        if (terrainTypes != null)
+                        {
+                            //Relative entity terrain type logic
+                            //Ray ray = new Ray(neighbour.worldPos + Vector3.up * 10f, Vector3.down);
+                            //if (Physics.Raycast(ray, out RaycastHit hit, 100f, allWalkableMasks))
+                            //{
+                            //    walkableDict.TryGetValue(hit.collider.gameObject.layer, out neighbourPenalty);
+                            //}
+
+                            Collider[] collider = Physics.OverlapBox(neighbour.worldPos, Vector3.one * 0.45f, Quaternion.identity, allWalkableMasks);
+                            if (collider.Length > 0)
+                            {
+                                walkableDict.TryGetValue(collider[0].gameObject.layer, out neighbourPenalty);
+                            }
+                        }
+
+                        int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbourPenalty;
                         if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                         {
                             neighbour.gCost = newMovementCostToNeighbour;
@@ -240,5 +280,12 @@ namespace Grid.Pathfinding
             }
             return -compare;
         }
+    }
+
+    [Serializable]
+    public class TerrainType
+    {
+        public LayerMask terrainMask;
+        public int terrainPenalty;
     }
 }

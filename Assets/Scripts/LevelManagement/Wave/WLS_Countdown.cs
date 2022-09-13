@@ -23,16 +23,16 @@ namespace LevelManagement
 
         public override void ExitState()
         {
-            Debug.Log("Begin Play!");
-        }
 
+        }
+        
         public override void UpdateState()
         {
             countdown -= Time.deltaTime;
             if (countdown <= 0f)
             {
                 ExitState();
-                SwitchState(wlFactory.Spawning);
+                SwitchState(wlFactory.Spawning());
             }
         }
     }

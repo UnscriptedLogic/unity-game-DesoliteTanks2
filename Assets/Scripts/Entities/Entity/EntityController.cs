@@ -25,10 +25,17 @@ namespace Entities
                     DoFindPlayerTag();
                 }
             }
+
+            entityID += UnityEngine.Random.Range(1000, 9999);
         }
 
         public void SetTarget(Transform newTarget)
         {
+            if (newTarget == null)
+            {
+                return;
+            }
+
             target = newTarget;
             OnTargetSet?.Invoke();
         }
@@ -49,7 +56,11 @@ namespace Entities
 
         public void DoFindPlayerTag()
         {
-            SetTarget(GameObject.FindGameObjectWithTag("Player").transform);
+            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null)
+            {
+                SetTarget(playerObject.transform);
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Core
 {
-    public class EntityDropsManager : MonoBehaviour
+    public class EntityDropsManager : MonoBehaviour, IListensToEntityDeath
     {
         [SerializeField] private EntityDropListSO dropListSO;
         [SerializeField] private DamageManager damageManager;
@@ -19,23 +19,26 @@ namespace Core
 
         private void Start()
         {
-            damageManager.OnDamageTaken += OnDamageTaken;
+            entityManager.OnEntityDeath += OnEntityDeath;
         }
 
-        private void OnDamageTaken(string attackerID, string tankID, float prevHealth, float currentHealth)
+        public void OnEntityDeath(GameObject entity)
         {
-            EntityDropListSO.DropList dropList = dropListSO.EntityDropList.Find(x => x.tankID == tankID);
+            Debug.Log("Hello");
+
+            string entityID = entity.GetComponent<BaseManagerClass>().EntityID;
+            EntityDropListSO.DropList dropList = dropListSO.EntityDropList.Find(x => entityID.Contains(x.tankID));
             if (dropList != null)
             {
-                Vector3 entityLocation = entityManager.GetDeadEntityByID(tankID).transform.position;
+                Vector3 entityLocation = entity.transform.position;
                 foreach (GameObject entityDrop in dropList.entityDrops)
                 {
-                    GameObject loot = Instantiate(entityDrop, entityLocation + Vector3.up, Quaternion.identity);
-
+                    GameObject loot = EntityManager.instance.CreateEntity(entityDrop, entity.GetComponent<BaseManagerClass>().Team);
+                    loot.transform.SetPositionAndRotation(entityLocation + Vector3.up, Quaternion.identity);
                     float dirX = UnityEngine.Random.Range(-splashRadius, splashRadius);
                     float dirZ = UnityEngine.Random.Range(-splashRadius, splashRadius);
                     Vector3 direction = entityLocation + new Vector3(dirX, splashHeight, dirZ);
-
+                    loot.SetActive(true);
                     loot.GetComponent<Rigidbody>().AddForce((direction - entityLocation).normalized * force, ForceMode.Impulse);
                 }
             }
