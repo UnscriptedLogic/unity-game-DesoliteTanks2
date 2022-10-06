@@ -20,7 +20,7 @@ MonoBehaviour:
       chance: 75
     - loot: {fileID: 1911323863274586806, guid: 2523e6543965a3d4b9803d5d783f7f98,
         type: 3}
-      chance: 25
+      chance: 15
   - tankID: blue
     entityDrops:
     - loot: {fileID: 1911323863274586806, guid: 36072ec3fe8ca444fa03dd9cb74992b0,
@@ -39,7 +39,7 @@ MonoBehaviour:
       chance: 5
     - loot: {fileID: 1911323863274586806, guid: 2523e6543965a3d4b9803d5d783f7f98,
         type: 3}
-      chance: 1
+      chance: 2
     - loot: {fileID: 1911323863274586806, guid: e3d8e0f1e70d99e42a7c838720baefb3,
         type: 3}
-      chance: 1
+      chance: 2

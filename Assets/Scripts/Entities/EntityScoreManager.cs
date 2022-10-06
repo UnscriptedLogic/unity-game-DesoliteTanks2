@@ -2,20 +2,42 @@ using Entities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Core
 {
-    public class EntityScoreManager : MonoBehaviour, IListensToEntityCreated
+    public class EntityScoreManager : MonoBehaviour, IListensToEntityCreated, IListensToEntityDeath
     {
+        [SerializeField] private string entityToTrackID;
+        [SerializeField] private string entityOpponentTeamName;
         [SerializeField] private EntityManager entityManager;
         private Dictionary<string, int> teamScores = new Dictionary<string, int>();
 
+        [SerializeField] private int enemiesKilled;
+        [SerializeField] private int playerDeaths;
+        [SerializeField] private int coinsCollected;
+        [SerializeField] private float timePlayed;
+        [SerializeField] private int finalScore;
+
         public Action<Dictionary<string, int>> OnScoreModified;
+
+        public float TimePlayed => timePlayed;
+        public int EnemiesKilled => enemiesKilled;
+        public int PlayerDeaths => playerDeaths;
+        public int CoinsCollected => coinsCollected;
+        public int FinalScore => finalScore;
 
         protected void Awake()
         {
             entityManager.OnEntityCreated += OnEntityCreated;
+            entityManager.OnEntityDeath += OnEntityDeath;
+        }
+
+        private void Update()
+        {
+            timePlayed += Time.deltaTime;
         }
 
         public void OnEntityCreated(GameObject entity)
@@ -42,6 +64,29 @@ namespace Core
             }
 
             OnScoreModified?.Invoke(teamScores);
+        }
+
+        public void OnEntityDeath(Entity entity)
+        {
+            if (entity.EntityID.Contains(entityToTrackID))
+            {
+                playerDeaths++;
+            }
+            
+            if (entity.Team.Contains(entityOpponentTeamName) && entity.IsTank)
+            {
+                enemiesKilled++;
+            }
+
+            if (entity.EntityID.Contains("coin"))
+            {
+                coinsCollected++;
+            }
+        }
+
+        public void CalculateScores()
+        {
+            finalScore = (10 * coinsCollected) + (100 * enemiesKilled) - (100 * playerDeaths);
         }
     }
 }

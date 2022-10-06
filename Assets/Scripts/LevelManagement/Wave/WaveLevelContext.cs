@@ -39,8 +39,14 @@ namespace LevelManagement
         [SerializeField] private bool drawGizmos;
 
         [Header("User Interface")]
+        [SerializeField] private EntityScoreManager scoreManager;
         [SerializeField] private GameObject endGamePage;
         [SerializeField] private TextMeshProUGUI endGameText;
+        [SerializeField] private TextMeshProUGUI timePlayedTMP;
+        [SerializeField] private TextMeshProUGUI coinsCollectedTMP;
+        [SerializeField] private TextMeshProUGUI enemiesKilledTMP;
+        [SerializeField] private TextMeshProUGUI playerDeathTMP;
+        [SerializeField] private TextMeshProUGUI finalScoreTMP;
 
         private int waveIndex = -1;
         private WaveLevelFactory waveLevelFactory;
@@ -53,7 +59,13 @@ namespace LevelManagement
         public List<WL_SpawnList> WL_SpawnList => wl_SpawnLists;
         public GameObject EndGamePage => endGamePage;
         public TextMeshProUGUI EndGameText { get => endGameText; set { endGameText = value; } }
+        public EntityScoreManager ScoreManager => scoreManager;
         public EntityManager EntityManager => entityManager;
+        public TextMeshProUGUI TimePlayedTMP => timePlayedTMP;
+        public TextMeshProUGUI CoinsCollectedTMP => coinsCollectedTMP;
+        public TextMeshProUGUI EnemiesKilledTMP => enemiesKilledTMP;
+        public TextMeshProUGUI PlayerDeathTMP => playerDeathTMP;
+        public TextMeshProUGUI FinalScoreTMP => finalScoreTMP;
 
         private void Start()
         {

@@ -33,7 +33,6 @@ namespace Core
                 {
                     for (int j = 0; j < entityInventory.InventorySlots[i].amount; j++)
                     {
-                        Debug.Log(entityInventory.InventorySlots[i].amount);
                         CreateLoot(entity.transform.position, entityInventory.InventorySlots[i].item.ItemScriptable.ItemObject);
                     }
 

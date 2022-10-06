@@ -123,7 +123,7 @@ namespace Core
 
         public GameObject GetLiveEntityByID(string id) => liveEntities.Find(x => x.GetComponent<Entity>().EntityID.Contains(id));
         public GameObject GetDeadEntityByID(string id) => deadEntities.Find(x => x.GetComponent<Entity>().EntityID.Contains(id));
-        public GameObject GetEntityWithID(string id)
+        public Entity GetEntityWithID(string id)
         {
             GameObject entity = GetLiveEntityByID(id);
             if (entity == null)
@@ -131,7 +131,7 @@ namespace Core
                 entity = GetDeadEntityByID(id);
             }
 
-            return entity;
+            return entity.GetComponent<Entity>();
         }
         public static bool IsEntity(GameObject gameObject, out Entity entity) => gameObject.TryGetComponent(out entity);
         public static bool IsEntity(Transform gameObject, out Entity entity) => gameObject.TryGetComponent(out entity);
