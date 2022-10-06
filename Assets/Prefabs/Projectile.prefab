@@ -216,7 +216,7 @@ MonoBehaviour:
   team: 
   BruteForceAddToTeam: 0
   rb: {fileID: 2433552643598497706}
-  entityHealth: {fileID: 1959045039130049328}
+  myHealthScript: {fileID: 1959045039130049328}
   lifeTime: 3
   trailRenderer: {fileID: 7203300522579546043}
 --- !u!114 &1959045039130049328
@@ -234,6 +234,34 @@ MonoBehaviour:
   overrideHealth: 0
   maxHealth: 1
   currentHealth: 0
+  armor: 0
+  armorVFX:
+    audioClip: {fileID: 0}
+    volume: 0
+    spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
+    clipPriority: 0
+    particle: {fileID: 0}
+    particleDuration: 0
+  hurtVFX:
+    audioClip: {fileID: 0}
+    volume: 0
+    spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
+    clipPriority: 0
+    particle: {fileID: 0}
+    particleDuration: 0
+  deathVFX:
+    audioClip: {fileID: 0}
+    volume: 0
+    spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
+    clipPriority: 0
+    particle: {fileID: 0}
+    particleDuration: 0
   baseManager: {fileID: 7307339408544128559}
 --- !u!1 &8861732116770779213
 GameObject:

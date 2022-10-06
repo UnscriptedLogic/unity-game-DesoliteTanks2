@@ -1,5 +1,6 @@
 ﻿using Core;
 using System;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 namespace Entities
@@ -10,8 +11,19 @@ namespace Entities
         [SerializeField] protected float maxHealth = 100f;
         [SerializeField] protected float currentHealth;
 
+        [SerializeField] protected float armor;
+
+        [SerializeField] protected VFXSettings armorVFX;
+        [SerializeField] protected VFXSettings hurtVFX;
+        [SerializeField] protected VFXSettings deathVFX;
+
+        [SerializeField] public event Action<float> OnHealthChanged;
+
         [Header("Base Components")]
-        [SerializeField] protected BaseManagerClass baseManager;
+        [SerializeField] protected Entity baseManager;
+
+        public float CurrentHealth => currentHealth;
+        public float MaxHealth => maxHealth;
 
         protected virtual void OnEnable()
         {
@@ -21,31 +33,42 @@ namespace Entities
             }
         }
 
-        public void SetHealth(float newHealth)
-        {
-            currentHealth = newHealth;
-        }
-
-        public float GetCurrentHealth()
-        {
-            return currentHealth;
-        }
+        public void SetHealth(float newHealth) => currentHealth = newHealth;
+        public void SetMaxHealth(float newMaxHealth) => maxHealth = newMaxHealth;
+        public float GetCurrentHealth() => currentHealth;
 
         public virtual void TakeDamage(float amount, string attackerID, Action<float> OnDamageCallback)
         {
             if (attackerID == baseManager.EntityID)
                 return;
 
+            float damage = amount - armor;
+            damage = Mathf.Min(damage, CurrentHealth);
+
             float prevHealth = currentHealth;
-            currentHealth -= amount;
+
+            if (damage <= 0f)
+            {
+                damage = 0f;
+                armorVFX.PlayVFX(transform.position, transform.rotation);
+                OnDamageCallback?.Invoke(amount);
+                return;
+            }
+
+            currentHealth -= damage;
 
             if (currentHealth <= 0)
             {
                 EntityDeathMethod();
+                currentHealth = 0f;
             }
 
-            OnDamageCallback?.Invoke(prevHealth - currentHealth);
-            DamageManager.instance.DamageTaken(attackerID, baseManager.EntityID, prevHealth, currentHealth);
+            //Debug.Log($"{baseManager.EntityID}: Took {damage} damage, Absorbed {armor} damage, Has {currentHealth}/{maxHealth} health left, Returned {prevHealth - currentHealth + armor} damage");
+            
+            hurtVFX.PlayVFX(transform.position, transform.rotation);
+            OnDamageCallback?.Invoke(prevHealth - currentHealth + armor);
+            OnHealthChanged?.Invoke(prevHealth - currentHealth + armor);
+            DamageManager.instance.EntityTookDamage(attackerID, baseManager.EntityID, prevHealth, currentHealth);
         }
 
         public void OnDamageCallBack(float damageTaken)
@@ -56,7 +79,9 @@ namespace Entities
         protected virtual void EntityDeathMethod()
         {
             currentHealth = 0f;
-            EntityManager.instance.RemoveEntity(gameObject);
+            EntityManager.emInstance.RemoveEntity(gameObject);
+
+            deathVFX.PlayVFX(transform.position, transform.rotation);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,12 +30,12 @@ namespace Core
 
         public Transform poolContainer;
         public List<Pool> prePools;
-        public Dictionary<string, Queue<GameObject>> pools { get; protected set; }
+        public Dictionary<string, Transform> pools { get; protected set; }
 
         protected virtual void Start()
         {
             prePools = new List<Pool>();
-            pools = new Dictionary<string, Queue<GameObject>>();
+            pools = new Dictionary<string, Transform>();
             for (int i = 0; i < prePools.Count; i++)
             {
                 for (int j = 0; j < prePools[i].prespawnAmount; j++)
@@ -53,9 +54,10 @@ namespace Core
             {
                 //Greater than 1 because we never want a queue to be completely empty
                 //because we wont know what type of gameobject belongs to that queue
-                if (pools[poolName].Count > 1)
+                if (pools[poolName].childCount > 1)
                 {
-                    poolItem = pools[poolName].Dequeue();
+                    poolItem = pools[poolName].GetChild(0).gameObject;
+                    poolItem.transform.SetParent(null);
                 }
                 else
                 {
@@ -79,17 +81,15 @@ namespace Core
             GameObject poolItem;
             if (pools.ContainsKey(poolName))
             {
-                //Greater than 1 because we never want a queue to be completely empty
-                //because we wont know what type of gameobject belongs to that queue
-                if (pools[poolName].Count > 1)
+                if (pools[poolName].childCount > 0)
                 {
-                    poolItem = pools[poolName].Dequeue();
+                    poolItem = pools[poolName].GetChild(0).gameObject;
+                    poolItem.transform.SetParent(null);
                 }
                 else
                 {
                     poolItem = CreatePoolItem(poolRep);
                 }
-
             }
             else
             {
@@ -103,6 +103,9 @@ namespace Core
 
         public virtual void PushToPool(GameObject poolItem)
         {
+            if (poolItem == null)
+                return;
+
             string poolName = poolItem.name;
             if (!pools.ContainsKey(poolName))
             {
@@ -118,14 +121,25 @@ namespace Core
                 }
             }
 
-            pools[poolName].Enqueue(poolItem);
+            poolItem.transform.SetParent(pools[poolName]);
+        }
+
+        public virtual void PushToPoolAfter(float delay, GameObject poolItem) => StartCoroutine(DelayedPush(delay, poolItem));
+        protected IEnumerator DelayedPush(float delay, GameObject poolItem)
+        {
+            if (poolItem == null)
+                yield return null;
+
+            yield return new WaitForSeconds(delay);
+            PushToPool(poolItem);
         }
 
         protected virtual void CreatePool(string poolName, GameObject item)
         {
-            Queue<GameObject> newPoolQueue = new Queue<GameObject>();
-            pools.Add(poolName, newPoolQueue);
-            prePools.Add(new Pool(item, 0, CreatePoolContainer(item.name)));
+            Transform newPoolContainer = CreatePoolContainer(item.name);
+
+            pools.Add(poolName, newPoolContainer);
+            prePools.Add(new Pool(item, 0, newPoolContainer));
         }
 
         protected virtual GameObject CreatePoolItem(GameObject item)

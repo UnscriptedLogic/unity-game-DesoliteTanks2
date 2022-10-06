@@ -5,10 +5,12 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class PlayerMovement : MonoBehaviour, IMoveable
+    public class PlayerMovement : MonoBehaviour, IMoveable, IListensToGameState
     {
         [SerializeField] private float speed;
         [SerializeField] private Rigidbody rb;
+
+        [SerializeField] private VFXSettings movingVFX;
 
         private Vector3 moveDirection;
 
@@ -26,6 +28,21 @@ namespace Entities
             if (moveDirection.magnitude > 0)
             {
                 transform.forward = moveDirection;
+                if (!movingVFX.isAudioPlaying)
+                {
+                    movingVFX.PlayVFX(transform.position, Quaternion.identity, transform);
+                }
+                else
+                {
+                    movingVFX.audioSource.volume = Mathf.Lerp(movingVFX.audioSource.volume, movingVFX.volume, Time.deltaTime * 5f);
+                }
+            }
+            else
+            {
+                if (movingVFX.isAudioPlaying)
+                {
+                    movingVFX.audioSource.volume = Mathf.Lerp(movingVFX.audioSource.volume, 0.0025f, Time.deltaTime * 5f);
+                }
             }
         }
 
@@ -51,6 +68,11 @@ namespace Entities
             {
                 moveDirection = Vector3.zero;
             }
+        }
+
+        public void OnGameStateChanged(bool won)
+        {
+            enabled = false;
         }
     }
 }

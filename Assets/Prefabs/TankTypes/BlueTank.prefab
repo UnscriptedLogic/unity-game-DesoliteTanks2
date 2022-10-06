@@ -42,10 +42,11 @@ GameObject:
   - component: {fileID: 1014535781392883006}
   - component: {fileID: 1014535781392883007}
   - component: {fileID: 1014535781392883005}
-  - component: {fileID: 4905850300643520208}
-  - component: {fileID: 1014535781392882978}
   - component: {fileID: 1014535781365742385}
   - component: {fileID: 763260886347156726}
+  - component: {fileID: 987586506715917967}
+  - component: {fileID: 4152436576387737889}
+  - component: {fileID: 3925435608429825250}
   m_Layer: 7
   m_Name: BlueTank
   m_TagString: Untagged
@@ -81,8 +82,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.9, y: 0.5, z: 0.9}
-  m_Center: {x: 0, y: 0.25, z: 0}
+  m_Size: {x: 0.63418096, y: 0.5, z: 0.68976426}
+  m_Center: {x: -0, y: 0.25, z: -0.049173474}
 --- !u!54 &1014535781392883005
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -99,56 +100,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &4905850300643520208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1014535781392882979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 075ce7061d583514ab60868256f54772, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityID: tankblue
-  team: 
-  BruteForceAddToTeam: 0
-  target: {fileID: 0}
-  doBruteForcePlayerLocate: 1
---- !u!114 &1014535781392882978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1014535781392882979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6d9ef34ef90142408c4dc40824958c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  someClass: []
-  speed: 5
-  rb: {fileID: 1014535781392883005}
-  entityController: {fileID: 4905850300643520208}
-  repathAfterNodes: 2
-  repathInterval: 1
-  terrainTypes:
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 64
-    terrainPenalty: 50
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 128
-    terrainPenalty: 100
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 256
-    terrainPenalty: 50
-  drawPath: 1
-  pathColor: {r: 0, g: 0.8040824, b: 1, a: 1}
 --- !u!114 &1014535781365742385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,7 +115,36 @@ MonoBehaviour:
   overrideHealth: 1
   maxHealth: 1
   currentHealth: 1
-  baseManager: {fileID: 4905850300643520208}
+  armor: 0
+  armorVFX:
+    audioClip: {fileID: 0}
+    volume: 0
+    spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
+    clipPriority: 0
+    particle: {fileID: 0}
+    particleDuration: 0
+  hurtVFX:
+    audioClip: {fileID: 0}
+    volume: 1
+    spatialBlend: 0.5
+    loop: 0
+    playOnAwake: 0
+    clipPriority: 0
+    particle: {fileID: 0}
+    particleDuration: 1
+  deathVFX:
+    audioClip: {fileID: 8300000, guid: 236b08975de04904aa28a1394f1721a3, type: 3}
+    volume: 0.1
+    spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
+    clipPriority: 0
+    particle: {fileID: 8910431485625236283, guid: 49cc10adb49d3724cb0d67997651715f,
+      type: 3}
+    particleDuration: 1
+  baseManager: {fileID: 987586506715917967}
 --- !u!114 &763260886347156726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,12 +158,99 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
-  bulletSpeed: 150
+  bulletSpeed: 15
+  piercing: 1
+  lifetime: 3
   bulletPrefab: {fileID: 8861732116665388950, guid: a3474ef2f8f445c449b5402740945100,
     type: 3}
   bulletSpawn: {fileID: 1398325981}
-  baseManager: {fileID: 4905850300643520208}
-  attackInterval: 2
+  shootVFX:
+    audioClip: {fileID: 8300000, guid: 0866fbdef96db0e43859b2ee161038ef, type: 3}
+    volume: 0.35
+    spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
+    clipPriority: 0
+    particle: {fileID: 0}
+    particleDuration: 1
+  baseClass: {fileID: 987586506715917967}
+  attackInterval: {x: 0.8, y: 1}
+--- !u!114 &987586506715917967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014535781392882979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00d0a1d1f9918845b703f78e8bebbc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityID: tankblue
+  team: 
+  BruteForceAddToTeam: 0
+  chaseTag: player
+  speed: 5
+  entityLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  currentState: {fileID: 4152436576387737889}
+  rb: {fileID: 1014535781392883005}
+  defaultTerrainWeights:
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 64
+    terrainPenalty: 50
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 128
+    terrainPenalty: 100
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 256
+    terrainPenalty: 50
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 2048
+    terrainPenalty: -50
+  pathGizmoColor: {r: 0.5424528, g: 1, b: 0.9548102, a: 1}
+--- !u!114 &4152436576387737889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014535781392882979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0753ff1c8d74bfd46bc9eec83e69d1c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wanderRadius: 5
+  playerCheckRadius: 4.5
+  playerCloseState: {fileID: 3925435608429825250}
+  terrainWeights: []
+  drawPath: 1
+  drawWanderRadius: 0
+  drawCheckRadius: 0
+--- !u!114 &3925435608429825250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014535781392882979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6715fccf9e5279409d038f1cc06d7de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  giveupDistance: 3
+  terrainWeights: []
+  drawGiveUpDistance: 0
+  onGiveUpState: {fileID: 4152436576387737889}
+  drawPath: 1
 --- !u!1001 &5980474388027915004
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -247,6 +314,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: c7739bed5acc5a04dabd6f59f61852ce,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4c87313453d83694da12b7188068a589, type: 2}
     - target: {fileID: 919132149155446097, guid: c7739bed5acc5a04dabd6f59f61852ce,
         type: 3}
       propertyPath: m_Name
@@ -266,3 +338,27 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5980474388027915004}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6791287590691833773 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: c7739bed5acc5a04dabd6f59f61852ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 5980474388027915004}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6075544033104003813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6791287590691833773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

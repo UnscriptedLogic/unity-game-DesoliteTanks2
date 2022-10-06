@@ -20,14 +20,14 @@ namespace Grid.Pathfinding
             Instance = this;
         }
 
-        public static void RequestPath(Vector3 startPosition, Vector3 targetPosition, Action<List<Vector3>, bool> callback, TerrainType[] terrainTypes = null)
+        public static void RequestPath(Vector3 startPosition, Vector3 targetPosition, Action<List<Vector3>, bool> callback, TerrainWeights[] terrainTypes = null)
         {
             PathFindingRequest request = new PathFindingRequest(startPosition, targetPosition, callback);
             Instance.requestQueue.Enqueue(request);
             Instance.TryProcessNext(terrainTypes);
         }
 
-        private void TryProcessNext(TerrainType[] terrainTypes = null)
+        private void TryProcessNext(TerrainWeights[] terrainTypes = null)
         {
             if (isProcessing || requestQueue.Count == 0)
                 return;

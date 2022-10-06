@@ -1,4 +1,5 @@
 using CameraManagement;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace LevelManagement
         [SerializeField] protected CameraController cameraController;
 
         protected Transform player;
+
+        public Action<bool> OnEndGameStateChanged;
 
         public Transform PlayerStart => playerStart;
         public GameObject PlayerPrefab => playerPrefab;

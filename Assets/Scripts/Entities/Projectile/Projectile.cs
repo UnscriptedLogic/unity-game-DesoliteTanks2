@@ -6,23 +6,33 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class Projectile : BaseManagerClass
+    public class Projectile : Entity
     {
         [SerializeField] private Rigidbody rb;
-        [SerializeField] private EntityHealth entityHealth;
+        [SerializeField] private EntityHealth myHealthScript;
+        [SerializeField] private float lifeTime = 2f;
         
         private string tankID;
         private float damage;
         private float speed;
         private bool initialized;
-        [SerializeField] private float lifeTime = 3f;
+        private int piercing;
+
+        public string OwnerID => tankID;
 
         [Header("Components")]
         [SerializeField] private TrailRenderer trailRenderer;
 
         private float _lifeTime;
 
+        public Action<float> OnDamageTaken;
+
         private void OnEnable()
+        {
+            trailRenderer.Clear();
+        }
+
+        private void OnDisable()
         {
             trailRenderer.Clear();
         }
@@ -33,20 +43,30 @@ namespace Entities
             team = data.team;
             damage = data.damage;
             speed = data.bulletSpeed;
+            piercing = data.piercing;
+            lifeTime = data.lifeTime;
             _lifeTime = lifeTime;
-            entityHealth.SetHealth(damage);
+            myHealthScript.SetHealth(damage);
+            myHealthScript.SetMaxHealth(damage);
             initialized = true;
+        }
+
+        private void FixedUpdate()
+        {
+            if (initialized)
+            {
+                rb.MovePosition(transform.position + transform.forward * speed * Time.fixedDeltaTime);
+            }    
         }
 
         private void Update()
         {
             if (initialized)
             {
-                rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
 
                 if (_lifeTime <= 0)
                 {
-                    EntityManager.instance.RemoveEntity(gameObject);
+                    EntityManager.emInstance.RemoveEntity(gameObject);
                 }
                 else
                 {
@@ -57,25 +77,26 @@ namespace Entities
 
         private void OnTriggerEnter(Collider other)
         {
-            IDamageable damageScript = other.GetComponent<IDamageable>();
-            if (damageScript != null)
+            IDamageable targetScript = other.GetComponent<IDamageable>();
+            if (targetScript != null)
             {
-                if (other.GetComponent<BaseManagerClass>().Team == team)
+                if (other.GetComponent<Entity>().Team == team)
                 {
                     return; 
                 }
 
-                float hitEntityHealth = damageScript.GetCurrentHealth();
-                damageScript.TakeDamage(damage, tankID, damageTaken =>
+                float hitEntityHealth = targetScript.GetCurrentHealth();
+                float damage = myHealthScript.CurrentHealth;
+                if (piercing > 1) 
                 {
-                    entityHealth.TakeDamage(damageTaken, tankID, OnDamageCallback);
+                    damage = myHealthScript.MaxHealth / piercing;
+                }
+
+                targetScript.TakeDamage(damage, tankID, damageTaken =>
+                {
+                    myHealthScript.TakeDamage(damageTaken, tankID, OnDamageTaken);
                 });
             }
-        }
-
-        private void OnDamageCallback(float damageTaken)
-        {
-            
         }
     }
 }

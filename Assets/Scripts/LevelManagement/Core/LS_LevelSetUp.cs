@@ -17,7 +17,7 @@ namespace LevelManagement
             {
                 if (context.PlayerPrefab != null)
                 {
-                    context.Player = EntityManager.instance.CreateEntity(context.PlayerPrefab, "Protectors").transform;
+                    context.Player = EntityManager.emInstance.CreateEntity(context.PlayerPrefab, "Protectors").transform;
                     context.Player.SetPositionAndRotation(context.PlayerStart.position, context.PlayerStart.rotation);
                     context.Player.gameObject.SetActive(true);
                     

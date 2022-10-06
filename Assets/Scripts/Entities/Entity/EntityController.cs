@@ -5,27 +5,23 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class EntityController : BaseManagerClass
+    public class EntityController : Entity
     {
         [SerializeField] protected Transform target;
-        [SerializeField] protected bool doBruteForcePlayerLocate;
 
         public Action OnTargetSet;
 
-        protected void OnEnable()
+        protected virtual void OnEnable()
         {
             if (target != null)
             {
                 OnTargetSet?.Invoke();
             }
-            else
-            {
-                if (doBruteForcePlayerLocate)
-                {
-                    DoFindPlayerTag();
-                }
-            }
+        }
 
+        protected override void Start()
+        {
+            base.Start();
             entityID += UnityEngine.Random.Range(1000, 9999);
         }
 
@@ -61,6 +57,11 @@ namespace Entities
             {
                 SetTarget(playerObject.transform);
             }
+        }
+
+        protected void OnDisable()
+        {
+            target = null;
         }
     }
 }

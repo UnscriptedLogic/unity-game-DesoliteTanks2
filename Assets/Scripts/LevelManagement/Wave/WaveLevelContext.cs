@@ -1,7 +1,10 @@
-using Entities.Spawning;
+using Core;
+using TMPro;
 using System;
-using System.Collections.Generic;
+using Entities;
 using UnityEngine;
+using Entities.Spawning;
+using System.Collections.Generic;
 
 namespace LevelManagement
 {
@@ -22,17 +25,22 @@ namespace LevelManagement
         public bool WaitsForClearedLevel;
     }
 
-    public class WaveLevelContext : LevelStateContext
+    public class WaveLevelContext : LevelStateContext, IListensToEntityDeath
     {
         [Header("Preparation")]
         [SerializeField] protected float startDelay = 5f;
-        
+        [SerializeField] protected EntityManager entityManager;
+
         [Header("Spawning Settings")]
         [SerializeField] private Vector2 spawningArea;
         [SerializeField] private Vector3 center;
         [SerializeField] private SpawningManager spawningManager;
         [SerializeField] private List<WL_SpawnList> wl_SpawnLists = new List<WL_SpawnList>();
         [SerializeField] private bool drawGizmos;
+
+        [Header("User Interface")]
+        [SerializeField] private GameObject endGamePage;
+        [SerializeField] private TextMeshProUGUI endGameText;
 
         private int waveIndex = -1;
         private WaveLevelFactory waveLevelFactory;
@@ -43,16 +51,20 @@ namespace LevelManagement
         public Vector3 Center => center;
         public SpawningManager SpawnManager => spawningManager;
         public List<WL_SpawnList> WL_SpawnList => wl_SpawnLists;
+        public GameObject EndGamePage => endGamePage;
+        public TextMeshProUGUI EndGameText { get => endGameText; set { endGameText = value; } }
+        public EntityManager EntityManager => entityManager;
 
         private void Start()
         {
+            entityManager.OnEntityDeath += OnEntityDeath;
+
             waveLevelFactory = new WaveLevelFactory(this);
             StartStateMachine(waveLevelFactory.LevelSetUp);
         }
 
         public override void StateAfterSetUp()
         {
-            Debug.Log("Set up complete");
             currLevelState = waveLevelFactory.CountDown();
             currLevelState.EnterState();
         }
@@ -64,6 +76,15 @@ namespace LevelManagement
 
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(center, new Vector3(spawningArea.x, 0f, spawningArea.y));
+        }
+
+        //Switches regardless of any state
+        public void OnEntityDeath(Entity entity)
+        {
+            if (entity.GetComponent<Entity>().EntityID.Contains("base"))
+            {
+                currLevelState.SwitchState(waveLevelFactory.EndGame(false));
+            }
         }
     }
 }

@@ -42,9 +42,9 @@ namespace Grid.Pathfinding
             entityManager.OnEntityDeath += OnEntityDeath;
         }
 
-        public void OnEntityDeath(GameObject entity)
+        public void OnEntityDeath(Entity entity)
         {
-            BaseManagerClass baseManagerClass = entity.GetComponent<BaseManagerClass>();
+            Entity baseManagerClass = entity.GetComponent<Entity>();
             string id = baseManagerClass.EntityID;
 
             if (id.Contains("block"))

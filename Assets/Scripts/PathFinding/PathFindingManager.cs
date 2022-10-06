@@ -74,18 +74,18 @@ namespace Grid.Pathfinding
             return pfNodes[x, y];
         }
 
-        public void StartFindPath(Vector3 startPosition, Vector3 targetPosition, TerrainType[] terrainTypes = null)
+        public void StartFindPath(Vector3 startPosition, Vector3 targetPosition, TerrainWeights[] terrainTypes = null)
         {
             StartCoroutine(FindPath(startPosition, targetPosition, terrainTypes));
         }
 
-        private IEnumerator FindPath(Vector3 start, Vector3 end, TerrainType[] terrainTypes = null)
+        private IEnumerator FindPath(Vector3 start, Vector3 end, TerrainWeights[] terrainTypes = null)
         {
             LayerMask allWalkableMasks = new LayerMask();
             Dictionary<int, int> walkableDict = new Dictionary<int, int>();
             if (terrainTypes != null)
             {
-                foreach (TerrainType terrainType in terrainTypes)
+                foreach (TerrainWeights terrainType in terrainTypes)
                 {
                     allWalkableMasks |= terrainType.terrainMask.value;
                     walkableDict.Add((int)MathF.Log(terrainType.terrainMask.value, 2), terrainType.terrainPenalty);
@@ -283,7 +283,7 @@ namespace Grid.Pathfinding
     }
 
     [Serializable]
-    public class TerrainType
+    public class TerrainWeights
     {
         public LayerMask terrainMask;
         public int terrainPenalty;

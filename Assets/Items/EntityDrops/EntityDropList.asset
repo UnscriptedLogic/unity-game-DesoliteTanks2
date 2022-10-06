@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05ccd51abfeadc438373550760a3b55, type: 3}
+  m_Name: EntityDropList
+  m_EditorClassIdentifier: 
+  dropList:
+  - tankID: normal
+    entityDrops:
+    - loot: {fileID: 1911323863274586806, guid: 36072ec3fe8ca444fa03dd9cb74992b0,
+        type: 3}
+      chance: 75
+    - loot: {fileID: 1911323863274586806, guid: 2523e6543965a3d4b9803d5d783f7f98,
+        type: 3}
+      chance: 25
+  - tankID: blue
+    entityDrops:
+    - loot: {fileID: 1911323863274586806, guid: 36072ec3fe8ca444fa03dd9cb74992b0,
+        type: 3}
+      chance: 75
+    - loot: {fileID: 1911323863274586806, guid: 2523e6543965a3d4b9803d5d783f7f98,
+        type: 3}
+      chance: 10
+    - loot: {fileID: 1911323863274586806, guid: e3d8e0f1e70d99e42a7c838720baefb3,
+        type: 3}
+      chance: 5
+  - tankID: brick
+    entityDrops:
+    - loot: {fileID: 1911323863274586806, guid: 36072ec3fe8ca444fa03dd9cb74992b0,
+        type: 3}
+      chance: 5
+    - loot: {fileID: 1911323863274586806, guid: 2523e6543965a3d4b9803d5d783f7f98,
+        type: 3}
+      chance: 1
+    - loot: {fileID: 1911323863274586806, guid: e3d8e0f1e70d99e42a7c838720baefb3,
+        type: 3}
+      chance: 1

@@ -39,6 +39,13 @@ namespace LevelManagement
             entityIndex = 0;
             spawnedEntities = 0;
             wlContext.WaveIndex++;
+
+            if (wlContext.WaveIndex >= wlContext.WL_SpawnList.Count)
+            {
+                SwitchState(waveLevelFactory.EndGame(true));
+                return;
+            }
+
             listToSpawn = wlContext.WL_SpawnList[wlContext.WaveIndex];
             setToSpawn = listToSpawn.spawnList[entityIndex];
         }

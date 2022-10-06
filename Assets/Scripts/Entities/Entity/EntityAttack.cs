@@ -5,23 +5,28 @@ using UnityEngine;
 
 namespace Entities
 {
-    public class EntityAttack : BaseAttackClass
+    public class EntityAttack : BaseAttackClass, IListensToGameState
     {
         [Header("EntityAttack Extension")]
-        [SerializeField] private float attackInterval = 1f;
+        [SerializeField] private Vector2 attackInterval;
 
         private float _attackInterval;
 
+        public void OnGameStateChanged(bool won)
+        {
+            enabled = false;
+        }
+
         private void OnEnable()
         {
-            _attackInterval = attackInterval;
+            _attackInterval = MathHelper.RandomInRange(attackInterval);
         }
 
         private void Update()
         {
             if (_attackInterval <= 0)
             {
-                _attackInterval = attackInterval;
+                _attackInterval = MathHelper.RandomInRange(attackInterval);
                 CreateBullet();
             }
             else
