@@ -1,6 +1,7 @@
 ﻿using Core;
 using Entities;
 using Grid.Pathfinding;
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -12,19 +13,28 @@ namespace Entities
         [Header("Wander State Extension")]
         [SerializeField] private float wanderRadius;
         [SerializeField] private float playerCheckRadius;
+        [SerializeField] private float nextStateDelay;
+        [SerializeField] private float rewanderInterval;
         [SerializeField] private EntityState playerCloseState;
         [SerializeField] private TerrainWeights[] terrainWeights;
+
+        private float _nextStateDelay;
+        private float _rewanderInterval;
+        private bool canSwitchState;
+        private bool shouldRepath;
 
         [Space(15)]
         [SerializeField] private bool drawPath;
         [SerializeField] private bool drawWanderRadius;
         [SerializeField] private bool drawCheckRadius;
+        private bool drawStateGizmo;
 
         private Vector3 targetLocation;
         private PathfindingBehaviour pathfindingBehaviour;
 
         public override void EnterState(EntityStateMachine context)
         {
+            drawStateGizmo = true;
             base.EnterState(context);
             GetInput();
             pathfindingBehaviour = new PathfindingBehaviour(
@@ -34,42 +44,60 @@ namespace Entities
                 context.RigidbodyContext, 
                 terrainWeights.Length > 0 ? terrainWeights : context.DefaultTerrainWeights
                 );
+
+            pathfindingBehaviour.ReachedNextWaypoint += OnNextWaypoint;
+
+            _nextStateDelay = nextStateDelay;
+            canSwitchState = false;
+            shouldRepath = false;
+            initialized = true;
         }
-        
-        public override void UpdateState()
+
+        private void OnNextWaypoint()
         {
-            if (pathfindingBehaviour == null)
-                return;
+            canSwitchState = _nextStateDelay <= 0f;
 
-            if (pathfindingBehaviour.Path == null)
-                return;
-
-            if (pathfindingBehaviour.HasReachedEndOfPath())
+            if (shouldRepath)
             {
                 GetInput();
                 pathfindingBehaviour.RePath(targetLocation);
+                _rewanderInterval = rewanderInterval;
             }
-            
+        }
+
+        public override void UpdateState()
+        {
+            if (!initialized) return;
+
+            if (_rewanderInterval <= 0f)
+            {
+                shouldRepath = true;
+            }
+
+            _rewanderInterval -= Time.deltaTime;
+            _nextStateDelay -= Time.deltaTime;
+
             Move();
         }
 
         public override void FixedUpdateState()
         {
+            if (!canSwitchState) return;
+
             Collider[] colliders = Physics.OverlapSphere(transform.position, playerCheckRadius, context.EntityLayer);
             foreach (Collider collider in colliders)
             {
                 if (EntityManager.IsEntity(collider.gameObject, out Entity baseClass))
                 {
                     if (baseClass.EntityID == context.EntityID)
-                        return;
+                        continue;
 
                     if (baseClass.EntityID.Contains(context.ChaseTag))
                     {
-                        context.TargetRef = collider.transform;
+                        context.Target = collider.transform;
                         context.TargetLocation = collider.transform.position;
                         context.SetCurrentState(playerCloseState);
                         return;
-
                     }
                 }
             }
@@ -82,7 +110,13 @@ namespace Entities
             targetLocation = new Vector3(randomX, transform.position.y, randomZ);
         }
 
-        public override void ExitState() => pathfindingBehaviour.Stop();
+        public override void ExitState()
+        {
+            pathfindingBehaviour.Stop();
+            drawStateGizmo = false;
+            initialized = false;
+        }
+        
         public void Move() => pathfindingBehaviour.UpdateMove();
 
         private void OnDrawGizmos()
@@ -115,6 +149,12 @@ namespace Entities
             if (drawCheckRadius)
             {
                 Gizmos.DrawWireSphere(transform.position, playerCheckRadius);
+            }
+
+            if (drawStateGizmo)
+            {
+                Gizmos.color = Color.green; 
+                Gizmos.DrawWireCube(transform.position, Vector3.one);
             }
         }
     }

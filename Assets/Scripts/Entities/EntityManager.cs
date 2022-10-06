@@ -26,7 +26,6 @@ namespace Core
         }
 
         public static EntityManager emInstance;
-
         public List<EntityTeam> entityTeams = new List<EntityTeam>();
 
         [SerializeField] protected EntityPoolManager entityPoolManager;
@@ -124,7 +123,6 @@ namespace Core
 
         public GameObject GetLiveEntityByID(string id) => liveEntities.Find(x => x.GetComponent<Entity>().EntityID.Contains(id));
         public GameObject GetDeadEntityByID(string id) => deadEntities.Find(x => x.GetComponent<Entity>().EntityID.Contains(id));
-
         public GameObject GetEntityWithID(string id)
         {
             GameObject entity = GetLiveEntityByID(id);
@@ -135,10 +133,9 @@ namespace Core
 
             return entity;
         }
-
         public static bool IsEntity(GameObject gameObject, out Entity entity) => gameObject.TryGetComponent(out entity);
         public static bool IsEntity(Transform gameObject, out Entity entity) => gameObject.TryGetComponent(out entity);
-
+        
         protected void OnDrawGizmos()
         {
             if (drawBoxes)

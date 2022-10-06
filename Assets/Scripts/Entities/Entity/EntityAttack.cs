@@ -9,7 +9,7 @@ namespace Entities
     {
         [Header("EntityAttack Extension")]
         [SerializeField] private Vector2 attackInterval;
-
+        public Vector2 AttackInterval { get => attackInterval; set { attackInterval = value; } } 
         private float _attackInterval;
 
         public void OnGameStateChanged(bool won)

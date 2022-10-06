@@ -7,6 +7,7 @@ namespace Entities
     public class EntityState : MonoBehaviour
     {
         protected EntityStateMachine context;
+        protected bool initialized = false;
 
         public virtual void EnterState(EntityStateMachine context)
         {

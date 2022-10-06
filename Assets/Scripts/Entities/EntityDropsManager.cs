@@ -31,7 +31,6 @@ namespace Core
 
                 for (int i = 0; i < entityInventory.InventorySlots.Count; i++)
                 {
-                    Debug.Log(entityInventory.InventorySlots.Count);
                     for (int j = 0; j < entityInventory.InventorySlots[i].amount; j++)
                     {
                         Debug.Log(entityInventory.InventorySlots[i].amount);

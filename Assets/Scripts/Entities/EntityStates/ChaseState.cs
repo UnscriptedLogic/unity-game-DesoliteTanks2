@@ -12,18 +12,26 @@ namespace Entities
     public class ChaseState : EntityState, IMoveable
     {
         [Header("Chase State Extension")]
+        [SerializeField] private Vector2 attackIntervalOverride;
+        [SerializeField] private float checkInterval;
         [SerializeField] private float giveupDistance;
-        [SerializeField] private TerrainWeights[] terrainWeights;
-        [SerializeField] private bool drawGiveUpDistance;
         [SerializeField] private EntityState onGiveUpState;
-
-        private PathfindingBehaviour pathfindingBehaviour;
+        [SerializeField] private TerrainWeights[] terrainWeights;
+        
+        [SerializeField] private bool drawGiveUpDistance;
         [SerializeField] private bool drawPath;
+        private bool drawStateGizmos;
+
+        private PathfindingBehaviour pathFinder;
+        private Vector2 defaultAttackInterval;
+        private float _checkInterval;
+        private bool shouldRepath;
 
         public override void EnterState(EntityStateMachine context)
         {
             base.EnterState(context);
-            pathfindingBehaviour = new PathfindingBehaviour(
+            drawStateGizmos = true;
+            pathFinder = new PathfindingBehaviour(
                 context.TargetLocation,
                 context.Speed,
                 transform,
@@ -31,93 +39,113 @@ namespace Entities
                 terrainWeights.Length > 0 ? terrainWeights : context.DefaultTerrainWeights
                 );
 
-            pathfindingBehaviour.ReachedNextWaypoint += OnNextWaypoint;
+            defaultAttackInterval = context.AttackScript.AttackInterval;
+            context.AttackScript.AttackInterval = attackIntervalOverride;
+            pathFinder.ReachedNextWaypoint += OnNextWaypoint;
+            _checkInterval = checkInterval;
+            initialized = true;
         }
 
         private void OnNextWaypoint()
         {
-            if (!context.TargetRef.gameObject.activeInHierarchy)
+            if (pathFinder.HasReachedEndOfPath() || shouldRepath)
             {
-                context.SetCurrentState(onGiveUpState);
+                pathFinder.RePath(context.Target.position);
+                shouldRepath = false;
             }
-
-            if (Vector3.Distance(context.TargetRef.position, transform.position) >= giveupDistance)
-            {
-                context.SetCurrentState(onGiveUpState);
-            }
-
-            GetInput();
-            context.TargetLocation = context.TargetRef.position;
-            //pathfindingBehaviour.RePath(context.TargetLocation);
         }
 
         public override void UpdateState()
         {
-            if (pathfindingBehaviour == null)
-                return;
+            if (!initialized) return;
 
-            if (pathfindingBehaviour.Path == null)
-                return;
+            if (_checkInterval <= 0f)
+            {
+                _checkInterval = checkInterval;
+                shouldRepath = context.IsTargetAlive;
+
+                if (ShouldGiveUp())
+                {
+                    context.SetCurrentState(onGiveUpState);
+                    return;
+                }
+            }
+            else
+            {
+                _checkInterval -= Time.deltaTime;
+            }
 
             Move();
         }
 
-        public void GetInput() 
+        private bool ShouldGiveUp()
         {
-            if (context.TargetRef == null)
-            {
-                Transform potentialTarget = null;
-                float closestDist = Mathf.Infinity;
-                Collider[] colliders = Physics.OverlapSphere(transform.position, giveupDistance, context.EntityLayer);
-                foreach (Collider collider in colliders)
-                {
-                    Entity baseClass = collider.GetComponent<Entity>();
-                    if (baseClass != null)
-                    {
-                        if (baseClass.EntityID == context.EntityID)
-                            return;
-
-                        if (baseClass.EntityID.Contains(context.ChaseTag))
-                        {
-                            float dist = Vector3.Distance(transform.position, baseClass.transform.position);
-                            if (dist < closestDist)
-                            {
-                                closestDist = dist;
-                                potentialTarget = collider.transform;
-                            }
-                        }
-                    }
-                }
-
-                if (potentialTarget != null)
-                {
-                    context.TargetRef = potentialTarget;
-                    context.TargetLocation = potentialTarget.position;
-                    return;
-                }
-            }
+            return !context.IsTargetAlive || Vector3.Distance(context.Target.position, transform.position) >= giveupDistance;
         }
 
-        public void Move() => pathfindingBehaviour.UpdateMove();
-        public override void ExitState() => pathfindingBehaviour.Stop();
+        public void GetInput() 
+        {
+            
+
+            //if (context.TargetRef == null)
+            //{
+            //    Transform potentialTarget = null;
+            //    float closestDist = Mathf.Infinity;
+            //    Collider[] colliders = Physics.OverlapSphere(transform.position, giveupDistance, context.EntityLayer);
+            //    foreach (Collider collider in colliders)
+            //    {
+            //        Entity baseClass = collider.GetComponent<Entity>();
+            //        if (baseClass != null)
+            //        {
+            //            if (baseClass.EntityID == context.EntityID)
+            //                return;
+
+            //            if (baseClass.EntityID.Contains(context.ChaseTag))
+            //            {
+            //                float dist = Vector3.Distance(transform.position, baseClass.transform.position);
+            //                if (dist < closestDist)
+            //                {
+            //                    closestDist = dist;
+            //                    potentialTarget = collider.transform;
+            //                }
+            //            }
+            //        }
+            //    }
+
+            //    if (potentialTarget != null)
+            //    {
+            //        context.TargetRef = potentialTarget;
+            //        context.TargetLocation = potentialTarget.position;
+            //        return;
+            //    }
+            //}
+        }
+        public void Move() => pathFinder.UpdateMove();
+        public override void ExitState()
+        {
+            pathFinder.Stop();
+            drawStateGizmos = false;
+            initialized = false;
+            context.AttackScript.AttackInterval = defaultAttackInterval;
+        }
 
         private void OnDrawGizmos()
         {
             if (drawPath)
             {
-                if (pathfindingBehaviour == null)
+                if (pathFinder == null)
                     return;
 
-                if (pathfindingBehaviour.Path != null)
+                if (pathFinder.Path != null)
                 {
-                    for (int i = 0; i < pathfindingBehaviour.Path.Count; i++)
+                    for (int i = 0; i < pathFinder.Path.Count; i++)
                     {
                         Gizmos.color = context.PathGizmoColor;
-                        Gizmos.DrawSphere(pathfindingBehaviour.Path[i], 0.15f);
+                        Gizmos.DrawSphere(pathFinder.Path[i], 0.15f);
 
-                        if (i < pathfindingBehaviour.Path.Count - 1)
+                        if (i < pathFinder.Path.Count - 1)
                         {
-                            Gizmos.DrawLine(pathfindingBehaviour.Path[i], pathfindingBehaviour.Path[i + 1]);
+                            Gizmos.DrawLine(pathFinder.Path[i], pathFinder.Path[i + 1]);
                         }
                     }
                 }
@@ -126,6 +154,12 @@ namespace Entities
             if (drawGiveUpDistance)
             {
                 Gizmos.DrawWireSphere(transform.position, giveupDistance);
+            }
+
+            if (drawStateGizmos)
+            {
+                Gizmos.color = Color.red; 
+                Gizmos.DrawWireCube(transform.position, Vector3.one);
             }
         }
     }

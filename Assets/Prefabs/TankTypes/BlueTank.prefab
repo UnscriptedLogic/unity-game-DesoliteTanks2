@@ -192,11 +192,14 @@ MonoBehaviour:
   BruteForceAddToTeam: 0
   chaseTag: player
   speed: 5
+  currentState: {fileID: 4152436576387737889}
+  attackScript: {fileID: 763260886347156726}
+  healthScript: {fileID: 1014535781365742385}
+  rb: {fileID: 1014535781392883005}
   entityLayer:
     serializedVersion: 2
     m_Bits: 128
-  currentState: {fileID: 4152436576387737889}
-  rb: {fileID: 1014535781392883005}
+  pathGizmoColor: {r: 0.5424528, g: 1, b: 0.9548102, a: 1}
   defaultTerrainWeights:
   - terrainMask:
       serializedVersion: 2
@@ -214,7 +217,6 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 2048
     terrainPenalty: -50
-  pathGizmoColor: {r: 0.5424528, g: 1, b: 0.9548102, a: 1}
 --- !u!114 &4152436576387737889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,6 +231,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wanderRadius: 5
   playerCheckRadius: 4.5
+  nextStateDelay: 2
+  rewanderInterval: 5
   playerCloseState: {fileID: 3925435608429825250}
   terrainWeights: []
   drawPath: 1
@@ -246,10 +250,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6715fccf9e5279409d038f1cc06d7de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  giveupDistance: 3
-  terrainWeights: []
-  drawGiveUpDistance: 0
+  attackIntervalOverride: {x: 0.2, y: 0.5}
+  checkInterval: 2
+  giveupDistance: 10
   onGiveUpState: {fileID: 4152436576387737889}
+  terrainWeights:
+  - terrainMask:
+      serializedVersion: 2
+      m_Bits: 64
+    terrainPenalty: 10000
+  drawGiveUpDistance: 0
   drawPath: 1
 --- !u!1001 &5980474388027915004
 PrefabInstance:

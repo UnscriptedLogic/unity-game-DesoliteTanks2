@@ -11,13 +11,14 @@ namespace Entities
         [Header("State Machine Extension")]
         [SerializeField] protected string chaseTag = "player";
         [SerializeField] protected float speed;
-        [SerializeField] protected LayerMask entityLayer;
-
         [SerializeField] protected EntityState currentState;
+        [SerializeField] protected EntityAttack attackScript;
+        [SerializeField] protected BaseHealthClass healthScript;
         [SerializeField] protected Rigidbody rb;
-        [SerializeField] protected TerrainWeights[] defaultTerrainWeights;
-
+        [SerializeField] protected LayerMask entityLayer;
         [SerializeField] protected Color pathGizmoColor;
+
+        [SerializeField] protected TerrainWeights[] defaultTerrainWeights;
 
         protected EffectsManager audioManager;
 
@@ -25,15 +26,18 @@ namespace Entities
 
         //Perhaps not a good thing but if we ever want to inflict interrupting states like stunning,
         //we could just set it here
-        public EntityState CurrentState { get => currentState; set { currentState = value; } }
-        public TerrainWeights[] DefaultTerrainWeights => defaultTerrainWeights;
-        public Rigidbody RigidbodyContext => rb;
-        public Vector3 TargetLocation { get => targetLocation; set { targetLocation = value; } }
-        public Transform TargetRef { get => playerRef; set { playerRef = value; } }
-        public LayerMask EntityLayer => entityLayer;
-        public Color PathGizmoColor => pathGizmoColor;
         public EffectsManager AudioManager => audioManager;
+        public TerrainWeights[] DefaultTerrainWeights => defaultTerrainWeights;
+        public EntityState CurrentState { get => currentState; set { currentState = value; } }
+        public Rigidbody RigidbodyContext => rb;
+        public EntityAttack AttackScript => attackScript;
+        public BaseHealthClass HealthScript => healthScript;
+        public Transform Target { get => playerRef; set { playerRef = value; } }
+        public LayerMask EntityLayer => entityLayer;
+        public Vector3 TargetLocation { get => targetLocation; set { targetLocation = value; } }
+        public Color PathGizmoColor => pathGizmoColor;
         public string ChaseTag => chaseTag;
+        public bool IsTargetAlive => playerRef.gameObject.activeInHierarchy;
 
         protected override void Start()
         {
