@@ -202,22 +202,14 @@ MonoBehaviour:
     m_Bits: 128
   pathGizmoColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
   defaultTerrainWeights:
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 64
-    terrainPenalty: 2
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 128
-    terrainPenalty: 6
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 256
-    terrainPenalty: 10
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 2048
-    terrainPenalty: -50
+  - blockType: 0
+    terrainPenalty: 100
+  - blockType: 1
+    terrainPenalty: 10000
+  - blockType: 5
+    terrainPenalty: 100
+  - blockType: 6
+    terrainPenalty: -10000
 --- !u!114 &8359373543575983729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,9 +248,7 @@ MonoBehaviour:
   giveupDistance: 6
   onGiveUpState: {fileID: 8359373543575983729}
   terrainWeights:
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 64
+  - blockType: 0
     terrainPenalty: 10000
   drawGiveUpDistance: 0
   drawPath: 1

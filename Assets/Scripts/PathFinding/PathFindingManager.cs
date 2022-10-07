@@ -82,14 +82,13 @@ namespace Grid.Pathfinding
 
         private IEnumerator FindPath(Vector3 start, Vector3 end, TerrainWeights[] terrainTypes = null)
         {
-            LayerMask allWalkableMasks = new LayerMask();
-            Dictionary<int, int> walkableDict = new Dictionary<int, int>();
+            Dictionary<string, int> blockDict = new Dictionary<string, int>();
             if (terrainTypes != null)
             {
                 foreach (TerrainWeights terrainType in terrainTypes)
                 {
-                    allWalkableMasks |= terrainType.terrainMask.value;
-                    walkableDict.Add((int)MathF.Log(terrainType.terrainMask.value, 2), terrainType.terrainPenalty);
+                    if (!blockDict.ContainsKey(terrainType.GetBlockTag()))
+                        blockDict.Add(terrainType.GetBlockTag(), terrainType.terrainPenalty);
                 }
             }
 
@@ -123,10 +122,10 @@ namespace Grid.Pathfinding
                         int neighbourPenalty = 0;
                         if (terrainTypes != null)
                         {
-                            Collider[] collider = Physics.OverlapBox(neighbour.worldPos, Vector3.one * 0.45f, Quaternion.identity, allWalkableMasks);
+                            Collider[] collider = Physics.OverlapBox(neighbour.worldPos, Vector3.one * 0.45f, Quaternion.identity, walkableMask);
                             if (collider.Length > 0)
                             {
-                                walkableDict.TryGetValue(collider[0].gameObject.layer, out neighbourPenalty);
+                                blockDict.TryGetValue(collider[0].tag, out neighbourPenalty);
                             }
                         }
 
@@ -279,7 +278,39 @@ namespace Grid.Pathfinding
     [Serializable]
     public class TerrainWeights
     {
-        public LayerMask terrainMask;
+        public BlockType blockType;
         public int terrainPenalty;
+
+        public string GetBlockTag()
+        {
+            switch (blockType)
+            {
+                case BlockType.Brick:
+                    return "Brick";
+                case BlockType.Stone:
+                    return "Stone";
+                case BlockType.Obsidian:
+                    return "Obsidian";
+                case BlockType.Grass:
+                    return "Grass";
+                case BlockType.Rubble:
+                    return "Rubble";
+                case BlockType.Base:
+                    return "Base";
+                default:
+                    return "Brick";
+            }
+        }
+    }
+
+    public enum BlockType
+    {
+        Brick,
+        Stone,
+        Obsidian,
+        Grass,
+        Rubble,
+        Entity,
+        Base
     }
 }

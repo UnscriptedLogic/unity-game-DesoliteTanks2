@@ -15153,6 +15153,9 @@ MonoBehaviour:
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 8
+  walkableMask:
+    serializedVersion: 2
+    m_Bits: 256
   nodeRadius: 0.5
   pathRequester: {fileID: 1853199160}
   drawObstacles: 1

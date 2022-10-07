@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 892040690006482823}
   - component: {fileID: 4697951027351692082}
   - component: {fileID: 4697951027351692083}
-  m_Layer: 11
+  m_Layer: 8
   m_Name: MainMenuBase
-  m_TagString: Untagged
+  m_TagString: Base
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,6 +100,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 8a5d5790fe0e94f46b006eb6734c0c6a, type: 3}
     volume: 0.1
     spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
     clipPriority: 3
     particle: {fileID: 0}
     particleDuration: 0
@@ -107,6 +109,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: cd1742f2c1994c94191b6a9e099060e3, type: 3}
     volume: 0.1
     spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
     clipPriority: 0
     particle: {fileID: 6141080923795419565, guid: 3bc73427f0a245144b76c4e22cf0d96e,
       type: 3}
@@ -115,6 +119,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 1eb87e5feb6776744aad4e765f70528b, type: 3}
     volume: 0.5
     spatialBlend: 1
+    loop: 0
+    playOnAwake: 0
     clipPriority: 0
     particle: {fileID: 8473692769248485311, guid: c67b322ac1fbbd44cbe0542d5d7c5049,
       type: 3}

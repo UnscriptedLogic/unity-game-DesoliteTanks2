@@ -2612,7 +2612,7 @@ MonoBehaviour:
   team: Turned
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 256
 --- !u!114 &929103130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4324,6 +4324,9 @@ MonoBehaviour:
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 8
+  walkableMask:
+    serializedVersion: 2
+    m_Bits: 256
   nodeRadius: 0.5
   pathRequester: {fileID: 1853199160}
   drawObstacles: 1

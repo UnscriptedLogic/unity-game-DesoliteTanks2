@@ -202,22 +202,12 @@ MonoBehaviour:
     m_Bits: 128
   pathGizmoColor: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
   defaultTerrainWeights:
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 64
-    terrainPenalty: 50
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 128
-    terrainPenalty: 0
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 256
+  - blockType: 0
     terrainPenalty: 100
-  - terrainMask:
-      serializedVersion: 2
-      m_Bits: 2048
+  - blockType: 1
     terrainPenalty: 1000
+  - blockType: 5
+    terrainPenalty: -1000
 --- !u!114 &8359373543575983729
 MonoBehaviour:
   m_ObjectHideFlags: 0
