@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Entities.Inventory
 {
-    [CreateAssetMenu(menuName = "ScriptableObjects/Item", fileName = "New Item")]
+    [CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/Items/New Item", order = 0)]
     public class ItemSO : ScriptableObject
     {
         [SerializeField] private int maxStack = 1;

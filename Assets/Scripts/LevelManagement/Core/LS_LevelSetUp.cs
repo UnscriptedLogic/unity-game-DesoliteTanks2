@@ -2,6 +2,7 @@ using Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LevelManagement
 {
@@ -30,5 +31,10 @@ namespace LevelManagement
 
         public override void UpdateState() { }
         public override void ExitState() => context.StateAfterSetUp();
+
+        protected virtual void LoadMap(string gamemap)
+        {
+            SceneManager.LoadScene(gamemap, LoadSceneMode.Additive);
+        }
     }
 }

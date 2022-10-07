@@ -1,3 +1,4 @@
+using LevelManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,11 @@ namespace SceneManagement
 
         //[SerializeField] private float transitionTime = 3f;
         [SerializeField] private GameObject transitionPage;
+
+        public void MoveToScene(LevelDetailsSO levelDetail)
+        {
+            SceneManager.LoadScene(levelDetail.ModeName, LoadSceneMode.Single);
+        }
 
         public void ChangeScene(int sceneIndex)
         {

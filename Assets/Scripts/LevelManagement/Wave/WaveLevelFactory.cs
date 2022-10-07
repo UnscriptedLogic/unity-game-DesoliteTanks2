@@ -6,6 +6,7 @@ namespace LevelManagement
 {
     public class WaveLevelFactory : LevelStateFactory
     {
+        protected WLS_SetUp setUp;
         protected WLS_Countdown levelCountdown;
         protected WLS_Spawning spawning;
         protected WLS_Wait waiting;
@@ -13,12 +14,14 @@ namespace LevelManagement
 
         public WaveLevelFactory(LevelStateContext context) : base(context)
         {
+            setUp = new WLS_SetUp(context, this);
             levelCountdown = new WLS_Countdown(context, this);
             spawning = new WLS_Spawning(context, this);
             waiting = new WLS_Wait(context, this);
             endGame = new WLS_EndGame(context, this);
         }
 
+        public LevelState SetUp() => setUp;
         public LevelState CountDown() => levelCountdown;
         public LevelState Spawning() => spawning;
 

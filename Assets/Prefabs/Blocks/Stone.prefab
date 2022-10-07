@@ -94,9 +94,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overrideHealth: 1
-  maxHealth: 30
+  maxHealth: 100
   currentHealth: 0
-  armor: 4
+  armor: 6
   armorVFX:
     audioClip: {fileID: 8300000, guid: cd1742f2c1994c94191b6a9e099060e3, type: 3}
     volume: 0.1

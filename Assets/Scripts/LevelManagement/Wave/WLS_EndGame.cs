@@ -30,7 +30,7 @@ namespace LevelManagement
             wlContext.EndGameText.text = isGameWon ? "Stage Cleared!" : "Base Destroyed!";
             wlContext.EndGamePage.SetActive(true);
             context.OnEndGameStateChanged?.Invoke(isGameWon);
-            _displayInterval = 3f;
+            _displayInterval = 1f;
 
             wlContext.TimePlayedTMP.enabled = false;
             wlContext.CoinsCollectedTMP.enabled = false;
@@ -40,6 +40,11 @@ namespace LevelManagement
             showTimePlayed = true;
 
             wlContext.ScoreManager.CalculateScores();
+
+            if (isGameWon)
+            {
+                wlContext.LevelDetails.SetScore(wlContext.ScoreManager.FinalScore);
+            }
         }
 
         public override void ExitState()

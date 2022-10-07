@@ -15,11 +15,11 @@ namespace Core
         [SerializeField] private EntityManager entityManager;
         private Dictionary<string, int> teamScores = new Dictionary<string, int>();
 
-        [SerializeField] private int enemiesKilled;
-        [SerializeField] private int playerDeaths;
-        [SerializeField] private int coinsCollected;
-        [SerializeField] private float timePlayed;
-        [SerializeField] private int finalScore;
+        private int enemiesKilled;
+        private int playerDeaths;
+        private int coinsCollected;
+        private float timePlayed;
+        private int finalScore;
 
         public Action<Dictionary<string, int>> OnScoreModified;
 

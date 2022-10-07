@@ -30,6 +30,7 @@ namespace LevelManagement
         [Header("Preparation")]
         [SerializeField] protected float startDelay = 5f;
         [SerializeField] protected EntityManager entityManager;
+        protected WLDetailsSO wLDetailsSO;
 
         [Header("Spawning Settings")]
         [SerializeField] private Vector2 spawningArea;
@@ -55,8 +56,9 @@ namespace LevelManagement
         public float StartDelay => startDelay;
         public Vector2 SpawnArea => spawningArea;
         public Vector3 Center => center;
+        public WLDetailsSO LevelDetails { get => wLDetailsSO; set { wLDetailsSO = value; } }
         public SpawningManager SpawnManager => spawningManager;
-        public List<WL_SpawnList> WL_SpawnList => wl_SpawnLists;
+        public List<WL_SpawnList> WL_SpawnList { get => wl_SpawnLists; set { wl_SpawnLists = value; } }
         public GameObject EndGamePage => endGamePage;
         public TextMeshProUGUI EndGameText { get => endGameText; set { endGameText = value; } }
         public EntityScoreManager ScoreManager => scoreManager;
@@ -72,7 +74,7 @@ namespace LevelManagement
             entityManager.OnEntityDeath += OnEntityDeath;
 
             waveLevelFactory = new WaveLevelFactory(this);
-            StartStateMachine(waveLevelFactory.LevelSetUp);
+            StartStateMachine(waveLevelFactory.SetUp());
         }
 
         public override void StateAfterSetUp()
@@ -93,7 +95,7 @@ namespace LevelManagement
         //Switches regardless of any state
         public void OnEntityDeath(Entity entity)
         {
-            if (entity.GetComponent<Entity>().EntityID.Contains("base"))
+            if (entity.EntityID.Contains("base"))
             {
                 currLevelState.SwitchState(waveLevelFactory.EndGame(false));
             }

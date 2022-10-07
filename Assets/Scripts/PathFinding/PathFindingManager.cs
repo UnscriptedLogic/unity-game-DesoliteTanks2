@@ -9,6 +9,7 @@ namespace Grid.Pathfinding
     {
         [SerializeField] private GridManager gridManager;
         [SerializeField] private LayerMask unwalkableMask;
+        [SerializeField] private LayerMask walkableMask;
         [SerializeField] private float nodeRadius;
         [SerializeField] private PathFindingRequester pathRequester;
 
@@ -122,13 +123,6 @@ namespace Grid.Pathfinding
                         int neighbourPenalty = 0;
                         if (terrainTypes != null)
                         {
-                            //Relative entity terrain type logic
-                            //Ray ray = new Ray(neighbour.worldPos + Vector3.up * 10f, Vector3.down);
-                            //if (Physics.Raycast(ray, out RaycastHit hit, 100f, allWalkableMasks))
-                            //{
-                            //    walkableDict.TryGetValue(hit.collider.gameObject.layer, out neighbourPenalty);
-                            //}
-
                             Collider[] collider = Physics.OverlapBox(neighbour.worldPos, Vector3.one * 0.45f, Quaternion.identity, allWalkableMasks);
                             if (collider.Length > 0)
                             {
