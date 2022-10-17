@@ -83,44 +83,9 @@ namespace Entities
             return !context.IsTargetAlive || Vector3.Distance(context.Target.position, transform.position) >= giveupDistance;
         }
 
-        public void GetInput() 
-        {
-            
-
-            //if (context.TargetRef == null)
-            //{
-            //    Transform potentialTarget = null;
-            //    float closestDist = Mathf.Infinity;
-            //    Collider[] colliders = Physics.OverlapSphere(transform.position, giveupDistance, context.EntityLayer);
-            //    foreach (Collider collider in colliders)
-            //    {
-            //        Entity baseClass = collider.GetComponent<Entity>();
-            //        if (baseClass != null)
-            //        {
-            //            if (baseClass.EntityID == context.EntityID)
-            //                return;
-
-            //            if (baseClass.EntityID.Contains(context.ChaseTag))
-            //            {
-            //                float dist = Vector3.Distance(transform.position, baseClass.transform.position);
-            //                if (dist < closestDist)
-            //                {
-            //                    closestDist = dist;
-            //                    potentialTarget = collider.transform;
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    if (potentialTarget != null)
-            //    {
-            //        context.TargetRef = potentialTarget;
-            //        context.TargetLocation = potentialTarget.position;
-            //        return;
-            //    }
-            //}
-        }
+        public void GetInput() { } 
         public void Move() => pathFinder.UpdateMove();
+        
         public override void ExitState()
         {
             pathFinder.Stop();

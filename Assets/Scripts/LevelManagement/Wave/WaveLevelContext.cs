@@ -49,9 +49,6 @@ namespace LevelManagement
         [SerializeField] private TextMeshProUGUI playerDeathTMP;
         [SerializeField] private TextMeshProUGUI finalScoreTMP;
 
-        [Header("Gameplay Settings")]
-        private Transform baseLocation;
-
         private int waveIndex = -1;
         private WaveLevelFactory waveLevelFactory;
 
@@ -78,8 +75,6 @@ namespace LevelManagement
 
             waveLevelFactory = new WaveLevelFactory(this);
             StartStateMachine(waveLevelFactory.SetUp());
-
-            baseLocation = GameObject.FindGameObjectWithTag("Base").transform;
         }
 
         public override void StateAfterSetUp()

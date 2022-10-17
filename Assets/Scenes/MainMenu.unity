@@ -7601,10 +7601,6 @@ MonoBehaviour:
     type: 3}
   waveLevelDetails:
   - {fileID: 11400000, guid: 37b6f39a7386aca47b42df264c68a0b9, type: 2}
-  - {fileID: 11400000, guid: 37b6f39a7386aca47b42df264c68a0b9, type: 2}
-  - {fileID: 11400000, guid: 37b6f39a7386aca47b42df264c68a0b9, type: 2}
-  - {fileID: 11400000, guid: 37b6f39a7386aca47b42df264c68a0b9, type: 2}
-  - {fileID: 11400000, guid: 37b6f39a7386aca47b42df264c68a0b9, type: 2}
   waveLevelParent: {fileID: 1350793726}
   levelSelect: {fileID: 251215370}
   levelView: {fileID: 1423026095}

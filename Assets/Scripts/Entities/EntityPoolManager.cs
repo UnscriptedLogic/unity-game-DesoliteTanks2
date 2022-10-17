@@ -105,6 +105,12 @@ namespace Core
             {
                 inventoryManager.OnInventoryUpdated += inventoryUpdateListeners[i].OnInventoryUpdated;
             }
+
+            IRequiresBase[] requiresBases = entity.GetComponents<IRequiresBase>();
+            for (int i = 0; i < requiresBases.Length; i++)
+            {
+                requiresBases[i].InitBaseObject(levelStateContext.BaseLocation);
+            }
         }
 
         public void UnsubscribeEvents(GameObject entity)

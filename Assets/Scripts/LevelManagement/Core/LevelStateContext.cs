@@ -16,6 +16,7 @@ namespace LevelManagement
         [SerializeField] protected GameObject playerPrefab;
         [SerializeField] protected CameraController cameraController;
 
+        protected Transform baseLocation;
         protected Transform player;
 
         public Action<bool> OnEndGameStateChanged;
@@ -24,6 +25,7 @@ namespace LevelManagement
         public GameObject PlayerPrefab => playerPrefab;
         public CameraController CameraController => cameraController;
         public Transform Player { get => player; set { player = value; } }
+        public Transform BaseLocation { get => baseLocation; set { baseLocation = value; } }
 
         protected void StartStateMachine(LevelState startState)
         {

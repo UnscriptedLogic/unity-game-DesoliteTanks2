@@ -16,7 +16,7 @@ namespace Entities
 
         public virtual void UpdateState()
         {
-
+            if (!initialized) return;
         }
 
         public virtual void FixedUpdateState()

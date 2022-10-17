@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace LevelManagement
 {
     public class WLS_SetUp : LS_LevelSetUp
@@ -11,18 +13,26 @@ namespace LevelManagement
 
         public override void EnterState()
         {
+            string mapToLoad = GameManager.FALLBACK_MAP;
             if (GameManager.hasLevelDetails)
             {
                 WLDetailsSO levelDetails = (WLDetailsSO)GameManager.levelDetails;
                 wlContext.LevelDetails = levelDetails;
                 wlContext.WL_SpawnList = levelDetails.SpawnList;
-                LoadMap(levelDetails.MapName);
-            }
-            else
-            {
-                LoadMap(GameManager.FALLBACK_MAP);
+                mapToLoad = levelDetails.MapName;
             }
 
+            LoadMap(mapToLoad, (scene, loadMode) =>
+            {
+                GameObject baseGO = GameObject.FindGameObjectWithTag("Base");
+                if (baseGO != null)
+                {
+                    wlContext.BaseLocation = baseGO.transform;
+                }
+
+                Debug.Log(wlContext.BaseLocation);
+            });
+            
             base.EnterState();
         }
 

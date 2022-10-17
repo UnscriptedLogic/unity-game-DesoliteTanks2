@@ -1,7 +1,5 @@
 using Core;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace LevelManagement
@@ -34,7 +32,13 @@ namespace LevelManagement
 
         protected virtual void LoadMap(string gamemap)
         {
-            SceneManager.LoadScene(gamemap, LoadSceneMode.Additive);
+            SceneManager.LoadSceneAsync(gamemap, LoadSceneMode.Additive);
+        }
+
+        protected virtual void LoadMap(string gamemap, UnityAction<Scene, LoadSceneMode> OnLevelLoaded)
+        {
+            SceneManager.LoadSceneAsync(gamemap, LoadSceneMode.Additive);
+            SceneManager.sceneLoaded += OnLevelLoaded;
         }
     }
 }
