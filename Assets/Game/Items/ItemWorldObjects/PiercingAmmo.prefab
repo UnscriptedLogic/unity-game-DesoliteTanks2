@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6774448539498774153}
   - component: {fileID: 9127723748964830285}
   m_Layer: 7
-  m_Name: DamageAmmo
+  m_Name: PiercingAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911323863274586806}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 1, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -46,8 +46,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.6435833, y: 0.80994844, z: 0.6323668}
+  m_Center: {x: 0, y: -0.09502578, z: 0}
 --- !u!54 &6774448539498774153
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -73,13 +73,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1911323863274586806}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f48fd866da9efc4ca4f84b3e4293d1b, type: 3}
+  m_Script: {fileID: 11500000, guid: ca0f521416cc6604ba0a8ca76ea54537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   entityID: item
   team: items
   BruteForceAddToTeam: 0
-  item: {fileID: 11400000, guid: daaf637337a402449954dd2bb54a7cb2, type: 2}
+  item: {fileID: 11400000, guid: 2add1dea0c86b20429ce98fc20058e94, type: 2}
   pickupDelay: 1
   lifeTime: 15
   checkRadius: 0.5
@@ -102,7 +102,7 @@ MonoBehaviour:
     clipPriority: 2
     particle: {fileID: 0}
     particleDuration: 0
-  damageIncrease: 1
+  pierceIncrease: 1
 --- !u!1001 &6657058356220013608
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -175,7 +175,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: f260b88961c560f469734004e684d361, type: 2}
+      objectReference: {fileID: 2100000, guid: cdaf5cdbdcc063a45b0c00a5c403dbfa, type: 2}
     - target: {fileID: -5754084199372789682, guid: b78557300b445774bbc239d64deecf6d,
         type: 3}
       propertyPath: m_Mesh
